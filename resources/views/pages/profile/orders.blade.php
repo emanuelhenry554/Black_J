@@ -1,0 +1,46 @@
+@extends('pages.profile')
+
+@section('profile_content')
+<div class="flex flex-col gap-6">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="font-serif text-h2 text-primary">Historique des Commandes</h2>
+        <span class="text-caption text-on-surface-variant uppercase tracking-widest font-semibold"> la totalité de vos achats</span>
+    </div>
+
+    <div class="flex flex-col gap-4">
+        {{-- Order Card 1 --}}
+        <div class="bg-surface border border-outline-variant/30 p-6 rounded-lg shadow-card flex flex-col md:flex-row justify-between gap-6">
+            <div class="flex gap-4">
+                <div class="w-16 h-16 bg-surface-container rounded overflow-hidden flex-shrink-0">
+                    <span class="material-symbols-outlined w-full h-full flex items-center justify-center text-outline-variant">shopping_bag</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="font-semibold text-primary">Commande #ORD-2026-001</span>
+                    <span class="text-xs text-on-surface-variant">Passée le 24 Juin 2026</span>
+                </div>
+            </div>
+            <div class="flex flex-col items-end gap-2">
+                <span class="font-sans text-body font-bold text-primary">120 000 FCFA</span>
+                <span class="px-2 py-1 text-[10px] font-bold uppercase rounded bg-green-100 text-green-700 border border-green-200">Livrée</span>
+            </div>
+        </div>
+
+        {{-- Order Card 2 --}}
+        <div class="bg-surface border border-outline-variant/30 p-6 rounded-lg shadow-card flex flex-col md:flex-row justify-between gap-6">
+            <div class="flex gap-4">
+                <div class="w-16 h-16 bg-surface-container rounded overflow-hidden flex-shrink-0">
+                    <span class="material-symbols-outlined w-full h-full flex items-center justify-center text-outline-variant">shopping_bag</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="font-semibold text-primary">Commande #ORD-2026-005</span>
+                    <span class="text-xs text-on-surface-variant">Passée le 12 Mai 2026</span>
+                </div>
+            </div>
+            <div class="flex flex-col items-end gap-2">
+                <span class="font-sans text-body font-bold text-primary">45 000 FCFA</span>
+                <span class="px-2 py-1 text-[10px] font-bold uppercase rounded bg-blue-100 text-blue-700 border border-blue-200">En cours</span>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
