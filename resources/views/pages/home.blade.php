@@ -12,35 +12,129 @@
         <div class="order-2 md:order-1 flex flex-col items-start gap-6">
             <span class="chip-gold">Nouvelle Collection 2025</span>
             <h1 class="font-serif text-display text-white leading-none">
-                L'ÉLÉGANCE<br>SOUVERAINE.
+                L'EXCELLENCE<br>PURE.
             </h1>
             <p class="font-sans text-body-lg text-white/80 max-w-md leading-relaxed">
-                Laissez-vous sublimer par nos collections de sacs élégants et soignés, où chaque détail raconte l'héritage de l'artisanat ivoirien.
+                Des sacs d'exception pour sublimer chaque moment de votre histoire. Artisanat ivoirien, qualité intemporelle.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                 <a href="{{ route('boutique.index') }}" class="btn-primary text-center">Découvrir la boutique</a>
                 <a href="{{ route('collections.index') }}" class="btn-outline text-center" style="color: #fff; border-color: #a07830;">Nos collections</a>
             </div>
         </div>
-        {{-- Hero image --}}
-        <div class="order-1 md:order-2 relative h-[55vw] md:h-[65vh] w-full max-h-[600px]">
-            @if(isset($heroProduct) && $heroProduct->image)
-                <img src="{{ asset('img/'.$heroProduct->image) }}"
-                     alt="{{ $heroProduct->nom }}"
-                     class="absolute inset-0 w-full h-full object-cover"
-                     loading="eager">
-            @else
-                <img src="{{ asset('img/Sac-Blac-Joyaux-Bleu-Rose-Intense.jpg') }}"
-                     alt="Blac Joyaux — Sac Bleu Rose Intense"
-                     class="absolute inset-0 w-full h-full object-cover"
-                     loading="eager">
+        {{-- Hero carousel --}}
+        @php
+            // Utilise $heroImages si fourni par le contrôleur, sinon construit une liste
+            // à partir de $heroProduct, sinon une sélection par défaut.
+            $heroSlides = isset($heroImages) && count($heroImages) ? $heroImages : array_filter([
+                (isset($heroProduct) && $heroProduct->image) ? $heroProduct->image : null,
+                'Sac-Blac-Joyaux-Vert.jpg',
+                'Sac-Blac-Joyaux-Rouge-Bordeaux.jpg',
+                'Sac-Blac-Joyaux-croco-bleu-ciel.jpg',
+            ]);
+            if (empty($heroSlides)) {
+                $heroSlides = ['Sac-Blac-Joyaux-Bleu-Rose-Intense.jpg'];
+            }
+            $heroSlides = array_values($heroSlides);
+        @endphp
+        <div class="order-1 md:order-2 relative h-[55vw] md:h-[65vh] w-full max-h-[600px] overflow-hidden" id="heroCarousel">
+            <div class="hero-carousel-track flex h-full transition-transform duration-700 ease-out">
+                @foreach($heroSlides as $i => $img)
+                <div class="w-full h-full flex-shrink-0">
+                    <img src="{{ asset('img/'.$img) }}"
+                         alt="{{ (isset($heroProduct) && $i === 0) ? $heroProduct->nom : 'Blac Joyaux' }}"
+                         class="w-full h-full object-cover"
+                         loading="{{ $i === 0 ? 'eager' : 'lazy' }}">
+                </div>
+                @endforeach
+            </div>
+
+            @if(count($heroSlides) > 1)
+            {{-- Arrows --}}
+            <button type="button" class="hero-carousel-prev absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-surface/80 hover:bg-surface text-primary transition-colors" aria-label="Image précédente">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button type="button" class="hero-carousel-next absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-surface/80 hover:bg-surface text-primary transition-colors" aria-label="Image suivante">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+
+            {{-- Dots --}}
+            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+                @foreach($heroSlides as $i => $img)
+                <button type="button"
+                        class="hero-carousel-dot h-2 rounded-full transition-all {{ $i === 0 ? 'w-6 bg-secondary' : 'w-2 bg-white/50' }}"
+                        data-index="{{ $i }}"
+                        aria-label="Aller à l'image {{ $i + 1 }}"></button>
+                @endforeach
+            </div>
             @endif
+
             {{-- Gold accent corner --}}
-            <div class="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-secondary"></div>
-            <div class="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-secondary"></div>
+            <div class="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-secondary z-20 pointer-events-none"></div>
+            <div class="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-secondary z-20 pointer-events-none"></div>
         </div>
     </div>
 </section>
+
+@if(count($heroSlides) > 1)
+<script>
+(function () {
+    const carousel = document.getElementById('heroCarousel');
+    if (!carousel) return;
+
+    const track = carousel.querySelector('.hero-carousel-track');
+    const slides = carousel.querySelectorAll('.hero-carousel-track > div');
+    const dots = carousel.querySelectorAll('.hero-carousel-dot');
+    const prevBtn = carousel.querySelector('.hero-carousel-prev');
+    const nextBtn = carousel.querySelector('.hero-carousel-next');
+    const total = slides.length;
+    let current = 0;
+    let autoplayTimer = null;
+
+    function goTo(index) {
+        current = (index + total) % total;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('bg-secondary', i === current);
+            dot.classList.toggle('w-6', i === current);
+            dot.classList.toggle('bg-white/50', i !== current);
+            dot.classList.toggle('w-2', i !== current);
+        });
+    }
+
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+
+    function startAutoplay() { autoplayTimer = setInterval(next, 5000); }
+    function stopAutoplay() { clearInterval(autoplayTimer); }
+    function resetAutoplay() { stopAutoplay(); startAutoplay(); }
+
+    nextBtn?.addEventListener('click', () => { next(); resetAutoplay(); });
+    prevBtn?.addEventListener('click', () => { prev(); resetAutoplay(); });
+    dots.forEach(dot => dot.addEventListener('click', () => {
+        goTo(parseInt(dot.dataset.index, 10));
+        resetAutoplay();
+    }));
+
+    // Swipe tactile
+    let startX = 0;
+    carousel.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+    carousel.addEventListener('touchend', e => {
+        const diff = e.changedTouches[0].clientX - startX;
+        if (Math.abs(diff) > 50) {
+            diff > 0 ? prev() : next();
+            resetAutoplay();
+        }
+    }, { passive: true });
+
+    carousel.addEventListener('mouseenter', stopAutoplay);
+    carousel.addEventListener('mouseleave', startAutoplay);
+
+    goTo(0);
+    startAutoplay();
+})();
+</script>
+@endif
 
 {{-- =================== FEATURES BAR =================== --}}
 <section class="py-10 bg-surface border-y border-outline-variant/20">
@@ -67,7 +161,7 @@
             <h2 class="font-serif text-h1 text-primary uppercase tracking-widest mb-4">Nos Collections</h2>
             <div class="w-12 h-px bg-secondary mx-auto"></div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-gutter max-w-4xl mx-auto justify-center">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-gutter">
             @forelse($collections ?? [] as $collection)
             <a href="{{ route('boutique.index', ['categorie' => $collection->slug]) }}"
                class="group relative block aspect-square overflow-hidden bg-surface-container-low">
@@ -85,18 +179,18 @@
                 </div>
             </a>
             @empty
-            {{-- Fallback simplifié pour 2 collections centrées --}}
             @foreach([
-                ['Sacs à main',      'Sac-Blac-Joyaux-Rouge-Bordeaux.jpg'],
-                ['Sacs Élégance',    'Sac-Blac-Joyaux-croco-bleu-ciel.jpg'],
-            ] as [$cat, $img])
-            <a href="{{ route('boutique.index') }}" class="group relative block aspect-square overflow-hidden bg-surface-container-low">
+                ['do-dominique',       'DO - Dominique',  'Collection-Sacs-Blac-Joyaux-Do-Dominique-Ouattara.jpg'],
+                ['joyaux-de-bla',      'Joyaux de Bla',   'presentation-sac-blac-joyaux-croco-violet-.jpg'],
+                ['prestige-collection','Prestige',         'Sac-a-main-Blac-Joyaux-nouvelle-version-peau-serpent-petit.jpg'],
+            ] as [$slug, $label, $img])
+            <a href="{{ route('boutique.index', ['categorie' => $slug]) }}" class="group relative block aspect-square overflow-hidden bg-surface-container-low">
                 <div class="w-full h-full bg-surface-dim card-img transition-transform duration-500 group-hover:scale-105">
-                    <img src="{{ asset('img/'.$img) }}" alt="{{ $cat }}" class="w-full h-full object-cover">
+                    <img src="{{ asset('img/'.$img) }}" alt="{{ $label }}" class="w-full h-full object-cover">
                 </div>
                 <div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/10 to-transparent"></div>
                 <div class="absolute bottom-0 inset-x-0 p-4 md:p-6">
-                    <h3 class="font-serif text-h3 text-on-primary mb-1">{{ $cat }}</h3>
+                    <h3 class="font-serif text-h3 text-on-primary mb-1">{{ $label }}</h3>
                     <span class="text-caption uppercase tracking-widest text-secondary-fixed opacity-0 group-hover:opacity-100 transition-opacity duration-300">Découvrir →</span>
                 </div>
             </a>
@@ -125,14 +219,14 @@
         <div class="flex flex-col gap-6 order-1 lg:order-2">
             <span class="text-caption uppercase tracking-widest text-secondary font-sans font-semibold">Blac Joyaux</span>
             <h2 class="font-serif text-h1 text-white leading-tight">
-                UN HÉRITAGE<br>DE RÉSILIENCE.
+                L'EXCELLENCE<br>IVOIRIENNE.
             </h2>
             <div class="w-8 h-px bg-secondary"></div>
             <p class="font-sans text-body-lg text-white/80 leading-relaxed">
-                Blac Joyaux est plus qu'une marque de maroquinerie ; c'est une célébration de la fécondité et des traditions africaines. Nous fusionnons le luxe contemporain avec l'authenticité de notre terre.
+                Née à Abidjan, Blac Joyaux incarne le savoir-faire ivoirien et la passion du détail. Chaque création reflète notre engagement pour le luxe, l'authenticité et l'élégance intemporelle.
             </p>
             <p class="font-sans text-body text-white/70 leading-relaxed">
-                Chaque pièce est une promesse de durabilité et de raffinement, conçue pour accompagner la femme moderne dans sa quête d'excellence.
+                Nos artisans sélectionnent les plus beaux cuirs, travaillés avec une précision d'orfèvre, pour créer des pièces destinées à traverser les générations.
             </p>
             <a href="{{ route('about') }}" class="btn-outline self-start" style="color: #fff; border-color: #a07830;">Découvrir notre univers</a>
         </div>
@@ -149,54 +243,97 @@
             </a>
         </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        @forelse($featuredProducts ?? [] as $product)
-        <div class="product-card group flex flex-col">
-            <a href="{{ route('boutique.show', $product->slug ?? $product->id) }}"
-               class="block relative aspect-[3/4] overflow-hidden bg-surface-container-low mb-4">
-                @if($product->image)
-                <img src="{{ asset('img/'.$product->image) }}" alt="{{ $product->nom }}"
-                     class="card-img w-full h-full object-cover">
-                @else
-                <div class="card-img w-full h-full bg-surface-dim flex items-center justify-center">
-                    <span class="material-symbols-outlined text-4xl text-outline-variant">shopping_bag</span>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+            @forelse($featuredProducts ?? [] as $i => $product)
+            <div class="product-card group {{ $loop->first ? 'md:col-span-2' : '' }}">
+                <a href="{{ route('boutique.show', $product->slug ?? $product->id) }}"
+                   class="block relative {{ $loop->first ? 'aspect-[4/3]' : 'aspect-square' }} overflow-hidden bg-surface-container-low mb-4">
+                    @if($product->image)
+                    <img src="{{ asset('img/'.$product->image) }}" alt="{{ $product->nom }}"
+                         class="card-img w-full h-full object-cover">
+                    @else
+                    <div class="card-img w-full h-full bg-surface-dim flex items-center justify-center">
+                        <span class="material-symbols-outlined text-4xl text-outline-variant">shopping_bag</span>
+                    </div>
+                    @endif
+                    @if($product->edition_limitee ?? false)
+                    <div class="absolute top-3 left-3"><span class="chip-gold">Édition Limitée</span></div>
+                    @endif
+                </a>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-serif text-h3 text-primary mb-1 group-hover:text-secondary transition-colors">{{ $product->nom }}</h3>
+                        <p class="text-caption uppercase tracking-widest text-on-surface-variant">{{ $product->matiere ?? 'Cuir grainé' }}</p>
+                    </div>
+                    <span class="font-sans text-body text-primary font-semibold whitespace-nowrap">{{ number_format($product->prix, 0, ',', ' ') }} FCFA</span>
                 </div>
-                @endif
-                @if($product->edition_limitee ?? false)
-                <div class="absolute top-3 left-3"><span class="chip-gold">Édition Limitée</span></div>
-                @endif
-            </a>
-            <div class="flex justify-between items-start">
-                <div class="flex flex-col">
-                    <h3 class="font-serif text-h3 text-primary mb-1 group-hover:text-secondary transition-colors">{{ $product->nom }}</h3>
-                    <p class="text-caption uppercase tracking-widest text-on-surface-variant">{{ $product->matiere ?? 'Cuir grainé' }}</p>
-                </div>
-                <span class="font-sans text-body text-primary font-semibold whitespace-nowrap">{{ number_format($product->prix, 0, ',', ' ') }} FCFA</span>
             </div>
-        </div>
-        @empty
-        {{-- Fallback clean grid --}}
-        @foreach([
-            ['Le Joyau Émeraude', 'Sac-Blac-Joyaux-Vert.jpg', 'Cuir grainé', 150000],
-            ['Rosa Précieuse', 'Sac-Blac-Joyaux-Bleu-Rose-Intense.jpg', 'Édition Limitée', 185000],
-            ['L\'Héritage Bordeaux', 'Sac-Blac-Joyaux-Rouge-Bordeaux.jpg', 'Classique', 145000],
-        ] as [$nom, $img, $matiere, $prix])
-        <div class="product-card group flex flex-col">
-            <a href="{{ route('boutique.index') }}"
-               class="block relative aspect-[3/4] overflow-hidden bg-surface-container-low mb-4">
-                <img src="{{ asset('img/'.$img) }}" alt="{{ $nom }}" class="card-img w-full h-full object-cover">
-            </a>
-            <div class="flex justify-between items-start">
-                <div class="flex flex-col">
-                    <h3 class="font-serif text-h3 text-primary mb-1 group-hover:text-secondary transition-colors">{{ $nom }}</h3>
-                    <p class="text-caption uppercase tracking-widest text-on-surface-variant">{{ $matiere }}</p>
+            @empty
+            {{-- Ligne 1 : grand carré gauche + petit carré droit --}}
+            <div class="product-card group md:col-span-2">
+                <a href="{{ route('boutique.index') }}"
+                   class="block relative aspect-[4/3] overflow-hidden bg-surface-container-low mb-4">
+                    <img src="{{ asset('img/Sac-Blac-Joyaux-Vert.jpg') }}"
+                         alt="Le Joyau Émeraude"
+                         class="card-img w-full h-full object-cover">
+                    <div class="absolute top-3 left-3"><span class="chip-gold">Édition Limitée</span></div>
+                </a>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-serif text-h3 text-primary mb-1 group-hover:text-secondary transition-colors">Le Joyau Émeraude</h3>
+                        <p class="text-caption uppercase tracking-widest text-on-surface-variant">Cuir grainé</p>
+                    </div>
+                    <span class="font-sans text-body text-primary font-semibold whitespace-nowrap">150 000 FCFA</span>
                 </div>
-                <span class="font-sans text-body text-primary font-semibold whitespace-nowrap">{{ number_format($prix, 0, ',', ' ') }} FCFA</span>
             </div>
+            <div class="product-card group">
+                <a href="{{ route('boutique.index') }}"
+                   class="block relative aspect-square overflow-hidden bg-surface-container-low mb-4">
+                    <img src="{{ asset('img/Sac-Blac-Joyaux-Bleu-Rose-Intense.jpg') }}"
+                         alt="Rosa Précieuse"
+                         class="card-img w-full h-full object-cover">
+                </a>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-serif text-h3 text-primary mb-1 group-hover:text-secondary transition-colors">Rosa Précieuse</h3>
+                        <p class="text-caption uppercase tracking-widest text-on-surface-variant">Édition Limitée</p>
+                    </div>
+                    <span class="font-sans text-body text-primary font-semibold whitespace-nowrap">185 000 FCFA</span>
+                </div>
+            </div>
+            {{-- Ligne 2 : petit carré gauche + grand carré droit --}}
+            <div class="product-card group">
+                <a href="{{ route('boutique.index') }}"
+                   class="block relative aspect-square overflow-hidden bg-surface-container-low mb-4">
+                    <img src="{{ asset('img/Sac-Blac-Joyaux-Rouge-Bordeaux.jpg') }}"
+                         alt="L'Héritage Bordeaux"
+                         class="card-img w-full h-full object-cover">
+                </a>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-serif text-h3 text-primary mb-1 group-hover:text-secondary transition-colors">L'Héritage Bordeaux</h3>
+                        <p class="text-caption uppercase tracking-widest text-on-surface-variant">Classique</p>
+                    </div>
+                    <span class="font-sans text-body text-primary font-semibold whitespace-nowrap">145 000 FCFA</span>
+                </div>
+            </div>
+            <div class="product-card group md:col-span-2">
+                <a href="{{ route('boutique.index') }}"
+                   class="block relative aspect-[4/3] overflow-hidden bg-surface-container-low mb-4">
+                    <img src="{{ asset('img/Sac-Blac-Joyaux-croco-bleu-ciel.jpg') }}"
+                         alt="Bleu Impérial"
+                         class="card-img w-full h-full object-cover">
+                </a>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-serif text-h3 text-primary mb-1 group-hover:text-secondary transition-colors">Bleu Impérial</h3>
+                        <p class="text-caption uppercase tracking-widest text-on-surface-variant">Croco ciselé</p>
+                    </div>
+                    <span class="font-sans text-body text-primary font-semibold whitespace-nowrap">195 000 FCFA</span>
+                </div>
+            </div>
+            @endforelse
         </div>
-        @endforeach
-        @endforelse
-    </div>
     </div>
 </section>
 
