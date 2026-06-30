@@ -206,18 +206,16 @@
 
 <body class="min-h-screen flex flex-col antialiased">
 
-    {{-- ====================== ANNOUNCEMENT BAR ====================== --}}
-    <div class="bg-primary text-on-primary text-center py-2 px-4 z-50">
-        <p class="text-caption uppercase tracking-widest">Livraison gratuite à Abidjan pour toute commande supérieure à 100 000 FCFA</p>
-    </div>
+    {{-- ====================== HEADER / NAV ====================== --}}>
 
     {{-- ====================== HEADER / NAV ====================== --}}
-    <header id="main-header" class="bg-surface/95 backdrop-blur-md fixed top-8 left-0 w-full z-50 border-b border-outline-variant/30 transition-all duration-300 py-3">
+    <header id="main-header" class="bg-surface/95 backdrop-blur-md fixed top-0 left-0 w-full z-50 border-b border-outline-variant/30 transition-all duration-300 py-3">
         <div class="flex items-center justify-between max-w-site mx-auto px-px-mobile md:px-px-desktop py-1">
 
             {{-- Left nav (desktop) --}}
             <nav class="hidden md:flex items-center gap-8">
                 <a href="{{ route('collections.index') }}" class="nav-link text-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">Collections</a>
+                <a href="{{ route('innovation') }}" class="nav-link text-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">Innovation</a>
                 <a href="{{ route('about') }}" class="nav-link text-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">À Propos</a>
             </nav>
 
@@ -291,6 +289,7 @@
         <nav class="flex flex-col gap-1 p-6">
             <a href="{{ route('home') }}" class="py-3 border-b border-outline-variant/20 text-label uppercase tracking-widest text-on-surface hover:text-secondary transition-colors">Accueil</a>
             <a href="{{ route('collections.index') }}" class="py-3 border-b border-outline-variant/20 text-label uppercase tracking-widest text-on-surface hover:text-secondary transition-colors">Collections</a>
+            <a href="{{ route('innovation') }}" class="py-3 border-b border-outline-variant/20 text-label uppercase tracking-widest text-on-surface hover:text-secondary transition-colors">Innovation</a>
             <a href="{{ route('boutique.index') }}" class="py-3 border-b border-outline-variant/20 text-label uppercase tracking-widest text-on-surface hover:text-secondary transition-colors">Boutique</a>
             <a href="{{ route('about') }}" class="py-3 border-b border-outline-variant/20 text-label uppercase tracking-widest text-on-surface hover:text-secondary transition-colors">À Propos</a>
             <a href="{{ route('contact') }}" class="py-3 border-b border-outline-variant/20 text-label uppercase tracking-widest text-on-surface hover:text-secondary transition-colors">Contact</a>
@@ -309,8 +308,7 @@
         </div>
     </aside>
 
-    {{-- Header spacer --}}
-    <div class="h-[7.5rem]"></div>
+    {{-- Header spacer removed to eliminate gap between header and first block --}}
 
     {{-- ====================== FLASH MESSAGES ====================== --}}
     @if(session('success'))
@@ -336,7 +334,7 @@
     @endif
 
     {{-- ====================== MAIN CONTENT ====================== --}}
-    <main class="flex-grow">
+    <main class="flex-grow pt-10">
         @yield('content')
     </main>
 
@@ -391,7 +389,6 @@
                     <li><a href="{{ route('boutique.index') }}?categorie=sacs-a-main" class="text-body text-sm text-on-surface-variant hover:text-secondary transition-colors">Sacs à main</a></li>
                     <li><a href="{{ route('boutique.index') }}?categorie=elegance" class="text-body text-sm text-on-surface-variant hover:text-secondary transition-colors">Sacs Élégance</a></li>
                     <li><a href="{{ route('boutique.index') }}?categorie=luxe" class="text-body text-sm text-on-surface-variant hover:text-secondary transition-colors">Sacs Luxe</a></li>
-                    <li><a href="{{ route('boutique.index') }}?categorie=prestige" class="text-body text-sm text-on-surface-variant hover:text-secondary transition-colors">Pièces Prestige</a></li>
                     <li><a href="{{ route('boutique.index') }}?nouveautes=1" class="text-body text-sm text-on-surface-variant hover:text-secondary transition-colors">Nouveautés</a></li>
                 </ul>
             </div>

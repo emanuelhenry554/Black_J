@@ -24,6 +24,10 @@ class BoutiqueController extends Controller
 
         // Filtering by category
         if ($request->filled('categorie')) {
+            $categorySlug = $request->categorie;
+            if ($categorySlug === 'prestige-collection' || $categorySlug === 'prestige') {
+                return redirect()->route('boutique.index');
+            }
             $query->whereHas('category', function ($q) use ($request) {
                 $q->where('slug', $request->categorie);
             });
@@ -68,7 +72,7 @@ class BoutiqueController extends Controller
 
     public function collections()
     {
-        $categories = Category::all();
+        $categories = Category::whereNotIn('slug', ['prestige', 'prestige-collection'])->get();
 
         return view('pages.collections', compact('categories'));
     }

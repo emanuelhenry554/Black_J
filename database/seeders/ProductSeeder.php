@@ -15,7 +15,6 @@ class ProductSeeder extends Seeder
             ['nom' => 'Sacs à main', 'slug' => 'sacs-a-main'],
             ['nom' => 'Élégance', 'slug' => 'elegance'],
             ['nom' => 'Luxe', 'slug' => 'luxe'],
-            ['nom' => 'Prestige', 'slug' => 'prestige'],
         ];
 
         $images = [

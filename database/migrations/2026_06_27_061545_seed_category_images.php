@@ -15,7 +15,6 @@ return new class extends Migration
             'sacs-a-main' => 'sacs-blac-joyaux.jpg',
             'elegance'    => 'Sac-a-main-Blac-Joyaux-Gris-Brilliant.jpg',
             'luxe'        => 'Sac-a-main-Blac-Joyaux-Croco-Noir-Vernis.jpg',
-            'prestige'    => 'Sac-a-main-Blac-Joyaux-nouvelle-version-peau-serpent-petit.jpg',
         ];
 
         foreach ($categoryImages as $slug => $image) {

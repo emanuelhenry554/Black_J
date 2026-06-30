@@ -8,8 +8,8 @@
 {{-- PAGE HEADER --}}
 <div class="bg-surface-container-low border-b border-outline-variant/30 py-10 pattern-bg">
     <div class="max-w-site mx-auto px-px-mobile md:px-px-desktop text-center">
-        <p class="text-caption uppercase tracking-widest text-secondary font-sans font-semibold mb-3">L'Univers</p>
-        <h1 class="font-serif text-h1 text-primary">Nos Collections</h1>
+        <p class="text-caption uppercase tracking-widest text-secondary font-sans font-semibold mb-3">L'Art du Cuir</p>
+        <h1 class="font-serif text-h1 text-primary">Nos Univers de Maroquinerie</h1>
         <div class="w-8 h-px bg-secondary mx-auto mt-4"></div>
     </div>
 </div>
@@ -21,17 +21,15 @@
     $fallbackImages = [
         'do-dominique'        => 'Collection-Sacs-Blac-Joyaux-Do-Dominique-Ouattara.jpg',
         'joyaux-de-bla'       => 'presentation-sac-blac-joyaux-croco-violet-.jpg',
-        'prestige-collection' => 'Sac-a-main-Blac-Joyaux-nouvelle-version-peau-serpent-petit.jpg',
     ];
 
     $descriptions = [
-        'do-dominique'        => "La collection signature. Silhouettes fortes, cuirs nobles et identite africaine assumee.",
-        'joyaux-de-bla'       => "Pieces audacieuses aux couleurs eclatantes. Chaque sac est un bijou de caractere.",
-        'prestige-collection' => "L'excellence a l'etat pur. Matieres rares, finitions orfevrees, editions ultra-limitees.",
+        'do-dominique'        => "L'expression pure de l'élégance ivoirienne. Des silhouettes fortes et un cuir noble pour une allure souveraine.",
+        'joyaux-de-bla'       => "L'audace et la couleur au service du luxe. Chaque pièce est un bijou de caractère et de passion.",
     ];
     @endphp
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 max-w-5xl mx-auto">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 md:gap-10 max-w-5xl mx-auto justify-center">
         @foreach($categories as $category)
         @php
             $img  = $category->image ?: ($fallbackImages[$category->slug] ?? 'sacs-blac-joyaux.jpg');

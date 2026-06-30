@@ -12,7 +12,7 @@ class HomeController extends Controller
     {
         return view('pages.home', [
             'featuredProducts' => Product::where('is_featured', true)->limit(3)->get(),
-            'collections' => Category::all(),
+            'collections' => Category::whereNotIn('slug', ['prestige', 'prestige-collection'])->get(),
             'heroProduct' => Product::where('is_featured', true)->first(),
         ]);
     }
@@ -20,6 +20,11 @@ class HomeController extends Controller
     public function about()
     {
         return view('pages.about');
+    }
+
+    public function innovation()
+    {
+        return view('pages.innovation');
     }
 
     public function contact()

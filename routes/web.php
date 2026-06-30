@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\CustomerController;
 // =============================================
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/a-propos', [HomeController::class, 'about'])->name('about');
+Route::get('/innovation', [HomeController::class, 'innovation'])->name('innovation');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 

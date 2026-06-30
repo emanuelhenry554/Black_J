@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Boutique')
-@section('meta_description', 'Parcourez toute la collection Blac Joyaux — sacs à main, sacs luxe et pièces prestige.')
+@section('meta_description', 'Parcourez toute la collection Blac Joyaux — sacs à main, sacs luxe et créations exclusives.')
 
 @section('content')
 
@@ -26,7 +26,6 @@
                     ''                    => 'Tout',
                     'do-dominique'        => 'DO - Dominique',
                     'joyaux-de-bla'       => 'Joyaux de Bla',
-                    'prestige-collection' => 'Prestige',
                 ];
                 $currentCat = request('categorie', '');
             @endphp
