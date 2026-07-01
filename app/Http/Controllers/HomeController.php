@@ -11,7 +11,7 @@ class HomeController extends Controller
     public function index()
     {
         return view('pages.home', [
-            'featuredProducts' => Product::where('is_featured', true)->limit(3)->get(),
+            'featuredProducts' => Product::where('is_featured', true)->limit(4)->get(),
             'collections' => Category::whereNotIn('slug', ['prestige', 'prestige-collection'])->get(),
             'heroProduct' => Product::where('is_featured', true)->first(),
         ]);
