@@ -61,31 +61,45 @@
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-gutter">
         @foreach($products as $product)
         <div class="product-card group flex flex-col">
-            <a href="{{ route('boutique.show', $product->slug ?? $product->id) }}"
-               class="block relative aspect-[3/4] overflow-hidden bg-surface-container-low mb-3">
-                @if($product->image)
-                <img src="{{ asset('img/'.$product->image) }}" alt="{{ $product->nom }}"
-                     class="card-img w-full h-full object-cover">
-                @else
-                <div class="card-img w-full h-full bg-surface-dim flex items-center justify-center">
-                    <span class="material-symbols-outlined text-4xl text-outline-variant">shopping_bag</span>
-                </div>
-                @endif
-                {{-- Chips --}}
-                <div class="absolute top-3 left-3 flex flex-col gap-1">
-                    @if($product->edition_limitee ?? false)
-                        <span class="chip-gold">Limitée</span>
+            <div class="relative">
+                <a href="{{ route('boutique.show', $product->slug ?? $product->id) }}"
+                   class="block relative aspect-[3/4] overflow-hidden bg-surface-container-low mb-3">
+                    @if($product->image)
+                    <img src="{{ asset('img/'.$product->image) }}" alt="{{ $product->nom }}"
+                         class="card-img w-full h-full object-cover">
+                    @else
+                    <div class="card-img w-full h-full bg-surface-dim flex items-center justify-center">
+                        <span class="material-symbols-outlined text-4xl text-outline-variant">shopping_bag</span>
+                    </div>
                     @endif
-                    @if($product->nouveau ?? false)
-                        <span class="chip-gold" style="background:#1b1c1c">Nouveau</span>
-                    @endif
-                </div>
+                    {{-- Chips --}}
+                    <div class="absolute top-3 left-3 flex flex-col gap-1">
+                        @if($product->edition_limitee ?? false)
+                            <span class="chip-gold">Limitée</span>
+                        @endif
+                        @if($product->nouveau ?? false)
+                            <span class="chip-gold" style="background:#1b1c1c">Nouveau</span>
+                        @endif
+                    </div>
+                </a>
                 {{-- Wishlist --}}
-                <button class="absolute top-3 right-3 w-8 h-8 bg-surface/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-surface"
-                        title="Ajouter aux favoris">
-                    <span class="material-symbols-outlined text-[18px] text-primary">favorite</span>
-                </button>
-            </a>
+                @auth
+                <form method="POST" action="{{ route('profile.wishlist.toggle', $product) }}" class="absolute top-3 right-3 z-10">
+                    @csrf
+                    <button type="submit" class="w-8 h-8 bg-surface/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-surface"
+                            title="Ajouter aux favoris">
+                        <span class="material-symbols-outlined text-[18px] text-primary">
+                            {{ in_array($product->id, session('wishlist', []), true) ? 'favorite' : 'favorite_border' }}
+                        </span>
+                    </button>
+                </form>
+                @else
+                <a href="{{ route('login') }}" class="absolute top-3 right-3 z-10 w-8 h-8 bg-surface/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-surface"
+                   title="Connectez-vous pour ajouter aux favoris">
+                    <span class="material-symbols-outlined text-[18px] text-primary">favorite_border</span>
+                </a>
+                @endauth
+            </div>
             <div class="flex flex-col gap-1 flex-grow">
                 <a href="{{ route('boutique.show', $product->slug ?? $product->id) }}">
                     <h3 class="font-serif text-h3 text-primary leading-snug group-hover:text-secondary transition-colors">{{ $product->nom }}</h3>

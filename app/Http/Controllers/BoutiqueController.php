@@ -62,7 +62,7 @@ class BoutiqueController extends Controller
     {
         $product = Product::where('slug', $slug)->with(['category', 'colors', 'images'])->firstOrFail();
 
-        $relatedProducts = Product::where('categorie_id', $product->categorie_id)
+       $relatedProducts = Product::where('categorie_id', $product->categorie_id)
             ->where('id', '!=', $product->id)
             ->limit(4)
             ->get();

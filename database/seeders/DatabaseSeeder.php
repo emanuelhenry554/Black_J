@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use Database\Seeders\AdminUserSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -21,5 +22,13 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Create admin user for local testing
+        $this->call(AdminUserSeeder::class);
+
+        // Seed sample categories and products
+        if (class_exists(\Database\Seeders\ProductSeeder::class)) {
+            $this->call(\Database\Seeders\ProductSeeder::class);
+        }
     }
 }

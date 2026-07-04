@@ -46,7 +46,19 @@ class ProductSeeder extends Seeder
         $imageIndex = 0;
 
         foreach ($categories as $catData) {
-            $category = Category::create($catData);
+            // Map category fields to actual DB columns (nom vs name)
+            $catPayload = [];
+            if (\Illuminate\Support\Facades\Schema::hasColumn('categories', 'nom')) {
+                $catPayload['nom'] = $catData['nom'];
+            } else {
+                $catPayload['name'] = $catData['nom'];
+            }
+            $catPayload['slug'] = $catData['slug'];
+
+            $category = Category::updateOrCreate(['slug' => $catPayload['slug']], $catPayload);
+
+            // Determine product foreign key name (categorie_id vs category_id)
+            $categoryKey = \Illuminate\Support\Facades\Schema::hasColumn('products', 'categorie_id') ? 'categorie_id' : 'category_id';
 
             // Create 3 products for each category
             for ($i = 1; $i <= 3; $i++) {
@@ -55,21 +67,44 @@ class ProductSeeder extends Seeder
                 $image = $images[$imageIndex % count($images)];
                 $imageIndex++;
 
-                Product::create([
-                    'categorie_id' => $category->id,
-                    'nom' => $nom,
-                    'slug' => Str::slug($nom) . '-' . $i,
-                    'prix' => rand(50000, 500000),
-                    'matiere' => 'Cuir véritable',
-                    'description' => 'Une description détaillée pour le produit ' . $nom,
-                    'description_courte' => 'Une courte description pour ' . $nom,
-                    'image' => $image,
-                    'edition_limitee' => (bool)rand(0, 1),
-                    'nouveau' => (bool)rand(0, 1),
-                    'stock' => rand(1, 10),
-                    'dimensions' => '30cm x 20cm x 10cm',
-                    'caracteristiques' => 'Finition main, couture renforcée',
-                ]);
+                $productPayload = [];
+                $productPayload[$categoryKey] = $category->id;
+
+                // Map product name field (nom vs name)
+                if (\Illuminate\Support\Facades\Schema::hasColumn('products', 'nom')) {
+                    $productPayload['nom'] = $nom;
+                } else {
+                    $productPayload['name'] = $nom;
+                }
+
+                $productPayload['slug'] = Str::slug($nom) . '-' . $i;
+                // prix exists in this schema
+                $productPayload['prix'] = rand(50000, 500000);
+                $productPayload['matiere'] = 'Cuir véritable';
+                $productPayload['description'] = 'Une description détaillée pour le produit ' . $nom;
+                if (\Illuminate\Support\Facades\Schema::hasColumn('products', 'description_courte')) {
+                    $productPayload['description_courte'] = 'Une courte description pour ' . $nom;
+                }
+                $productPayload['image'] = $image;
+
+                // Optional fields if present
+                if (\Illuminate\Support\Facades\Schema::hasColumn('products', 'edition_limitee')) {
+                    $productPayload['edition_limitee'] = (bool)rand(0, 1);
+                }
+                if (\Illuminate\Support\Facades\Schema::hasColumn('products', 'nouveau')) {
+                    $productPayload['nouveau'] = (bool)rand(0, 1);
+                }
+                if (\Illuminate\Support\Facades\Schema::hasColumn('products', 'stock')) {
+                    $productPayload['stock'] = rand(1, 10);
+                }
+                if (\Illuminate\Support\Facades\Schema::hasColumn('products', 'dimensions')) {
+                    $productPayload['dimensions'] = '30cm x 20cm x 10cm';
+                }
+                if (\Illuminate\Support\Facades\Schema::hasColumn('products', 'caracteristiques')) {
+                    $productPayload['caracteristiques'] = 'Finition main, couture renforcée';
+                }
+
+                Product::updateOrCreate(['slug' => $productPayload['slug']], $productPayload);
             }
         }
     }

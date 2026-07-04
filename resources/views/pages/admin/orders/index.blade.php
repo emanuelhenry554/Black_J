@@ -11,9 +11,9 @@
 <div class="flex flex-col sm:flex-row gap-3 mb-6 items-start sm:items-center">
     <div class="flex gap-2 overflow-x-auto">
         @foreach(['Toutes' => '', 'En attente' => 'en_attente', 'En cours' => 'en_cours', 'Livrées' => 'livree', 'Annulées' => 'annulee'] as $label => $val)
-        <a href="{{ route('admin.orders.index', array_merge(request()->except('statut','page'), $val ? ['statut' => $val] : [])) }}"
+        <a href="{{ route('admin.orders.index', array_merge(request()->except('status','page'), $val ? ['status' => $val] : [])) }}"
            class="flex-shrink-0 px-4 py-2 text-caption uppercase tracking-widest font-sans font-semibold transition-colors
-                  {{ request('statut', '') === $val ? 'bg-primary text-on-primary' : 'bg-surface border border-outline-variant text-on-surface-variant hover:border-secondary' }}">
+                  {{ request('status', '') === $val ? 'bg-primary text-on-primary' : 'bg-surface border border-outline-variant text-on-surface-variant hover:border-secondary' }}">
             {{ $label }}
         </a>
         @endforeach
@@ -44,7 +44,7 @@
                     'livree'     => ['label' => 'Livrée',      'style' => 'background:#dcfce7;color:#15803d'],
                     'annulee'    => ['label' => 'Annulée',     'style' => 'background:#ffdad6;color:#93000a'],
                 ];
-                $st = $statusMap[$order->statut ?? 'en_attente'];
+                $st = $statusMap[$order->status ?? 'en_attente'];
                 @endphp
                 <tr class="hover:bg-surface-container-low transition-colors">
                     <td class="px-4 py-3 font-sans text-sm font-bold text-primary">#{{ $order->numero }}</td>

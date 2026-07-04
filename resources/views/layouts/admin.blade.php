@@ -76,7 +76,7 @@
             </a>
         </nav>
         <div class="p-4 border-t border-outline-variant/30">
-            <form method="POST" action="{{ route('logout') }}">
+            <form method="POST" action="{{ route('admin.logout') }}">
                 @csrf
                 <button type="submit" class="sidebar-link w-full text-left hover:text-error">
                     <span class="material-symbols-outlined text-[20px]">logout</span> Déconnexion
@@ -124,9 +124,9 @@
                 <h1 class="text-sm font-semibold text-primary uppercase tracking-widest">@yield('page_title', 'Administration')</h1>
             </div>
             <div class="flex items-center gap-3">
-                <span class="text-sm text-on-surface-variant hidden sm:block">{{ auth()->user()?->name ?? 'Admin' }}</span>
+                <span class="text-sm text-on-surface-variant hidden sm:block">{{ auth('admin')->user()?->name ?? 'Admin' }}</span>
                 <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-xs font-bold">
-                    {{ substr(auth()->user()?->name ?? 'A', 0, 1) }}
+                    {{ substr(auth('admin')->user()?->name ?? 'A', 0, 1) }}
                 </div>
             </div>
         </header>

@@ -59,7 +59,7 @@
                                 'livree'     => ['label' => 'Livrée',      'style' => 'background:#dcfce7;color:#15803d'],
                                 'annulee'    => ['label' => 'Annulée',     'style' => 'background:#ffdad6;color:#93000a'],
                             ];
-                            $st = $statusMap[$order->statut ?? 'en_attente'];
+                            $st = $statusMap[$order->status ?? 'en_attente'];
                             @endphp
                             <span class="inline-block px-2 py-0.5 text-[11px] font-sans font-semibold uppercase tracking-widest" style="{{ $st['style'] }}">{{ $st['label'] }}</span>
                         </td>
@@ -86,7 +86,7 @@
                 <a href="{{ route('admin.products.create') }}" class="btn-primary block text-center">
                     + Ajouter un produit
                 </a>
-                <a href="{{ route('admin.orders.index') }}?statut=en_attente" class="btn-outline block text-center">
+                <a href="{{ route('admin.orders.index') }}?status=en_attente" class="btn-outline block text-center">
                     Commandes en attente
                 </a>
             </div>

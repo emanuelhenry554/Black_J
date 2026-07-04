@@ -138,7 +138,7 @@
                 <form method="POST" action="{{ route('cart.add') }}">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id ?? '' }}">
-                    <input type="hidden" name="color_id" id="selected-color-id" value="{{ $product->colors->first()->id ?? '' }}">
+                    <input type="hidden" name="color_id" id="selected-color-id" value="{{ optional($product->colors->first())->id ?? '' }}">
                     <input type="hidden" name="quantity" value="1">
                     <button type="submit" class="btn-primary w-full text-center flex items-center justify-center gap-2">
                         <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
@@ -150,17 +150,31 @@
                     Indisponible
                 </button>
                 @endif
-                <button class="btn-outline w-full flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined text-[18px]">favorite</span>
+                @auth
+                <form method="POST" action="{{ route('profile.wishlist.toggle', $product) }}" class="btn-outline w-full flex items-center justify-center gap-2">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">
+                            {{ in_array($product->id, session('wishlist', []), true) ? 'favorite' : 'favorite_border' }}
+                        </span>
+                        {{ in_array($product->id, session('wishlist', []), true) ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
+                    </button>
+                </form>
+                @else
+                <a href="{{ route('login') }}" class="btn-outline w-full flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">favorite_border</span>
                     Ajouter aux favoris
-                </button>
+                </a>
+                @endauth
             </div>
 
             {{-- WhatsApp CTA --}}
             <a href="https://wa.me/2250584889918?text=Bonjour, je suis intéressé(e) par {{ urlencode($product->nom ?? 'votre produit') }}"
                target="_blank"
                class="flex items-center gap-3 border border-green-500/40 p-4 hover:bg-green-50 transition-colors">
-                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1. la la lalaL de l'image" class="w-full h-full object-cover"></svg>
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M16.185 7.746c-.397-.198-2.34-1.162-2.7-1.293-.36-.132-.622-.198-.885.198-.263.397-1.025 1.293-1.256 1.557-.23.264-.463.297-.86.099-.397-.198-1.676-.616-3.19-1.967-1.179-.982-1.976-2.194-2.208-2.59-.23-.397-.025-.612.176-.81.18-.177.397-.463.596-.697.198-.236.264-.397.397-.645.132-.248.066-.463-.033-.645-.099-.198-.885-2.134-1.213-2.924-.323-.77-.652-.667-.885-.68-.23-.013-.498-.015-.765-.015-.264 0-.695.099-1.062.463-.367.365-1.4 1.366-1.4 3.334 0 1.968 1.433 3.876 1.633 4.142.198.264 2.812 4.288 6.794 6.02.95.411 1.69.656 2.268.838.954.305 1.823.262 2.507.159 0 0 1.06-.124 1.713-.504.688-.398 2.218-1.76 2.531-3.464.312-1.704.312-3.164.219-3.464-.099-.33-.366-.53-.767-.728z"/>
+                </svg>
                 <div>
                     <p class="text-caption uppercase tracking-widest font-sans font-semibold text-green-700">Commander via WhatsApp</p>
                     <p class="text-sm font-sans text-on-surface-variant">Réponse en moins de 24h</p>

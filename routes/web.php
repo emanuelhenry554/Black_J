@@ -7,11 +7,15 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController as AdminAuthenticatedSessionController;
+use App\Http\Middleware\EnsureAdmin;
 
 // =============================================
 // PAGES PUBLIQUES
@@ -40,9 +44,13 @@ Route::delete('/panier/{id}', [CartController::class, 'remove'])->name('cart.rem
 // =============================================
 // COMMANDE / PAIEMENT
 // =============================================
-Route::get('/commande', [CheckoutController::class, 'index'])->name('checkout.index');
-Route::post('/commande', [CheckoutController::class, 'process'])->name('checkout.process');
-Route::get('/commande/confirmation/{numero}', [CheckoutController::class, 'confirmation'])->name('checkout.confirmation');
+Route::middleware('auth')->group(function () {
+    Route::get('/commande', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/commande', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::get('/commande/simulation/{numero}', [CheckoutController::class, 'simulation'])->name('checkout.simulation');
+    Route::post('/commande/simuler-succes/{numero}', [CheckoutController::class, 'simulerSucces'])->name('checkout.simulerSucces');
+    Route::get('/commande/confirmation/{numero}', [CheckoutController::class, 'confirmation'])->name('checkout.confirmation');
+});
 
 // =============================================
 // AUTH (si tu utilises Laravel Breeze/Sanctum)
@@ -67,36 +75,47 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profil/mot-de-passe', [ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::get('/profil/commandes', [ProfileController::class, 'orders'])->name('profile.orders');
     Route::get('/profil/favoris', [ProfileController::class, 'wishlist'])->name('profile.wishlist');
+    Route::post('/profil/favoris/{product}', [ProfileController::class, 'toggleWishlist'])->name('profile.wishlist.toggle');
+    Route::delete('/profil/favoris/{product}', [ProfileController::class, 'removeWishlist'])->name('profile.wishlist.remove');
     Route::get('/profil/adresses', [ProfileController::class, 'addresses'])->name('profile.addresses');
 });
 
 // =============================================
 // ADMINISTRATION
 // =============================================
-//    Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group(function () {
-  Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::middleware('guest:admin')->group(function () {
+        Route::get('/connexion', [AdminAuthenticatedSessionController::class, 'create'])->name('login');
+        Route::post('/connexion', [AdminAuthenticatedSessionController::class, 'store'])->name('login.store');
+    });
 
-    // Dashboard
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/deconnexion', [AdminAuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-    // Commandes
-    Route::get('/commandes', [OrderController::class, 'index'])->name('orders.index');
-    Route::get('/commandes/{id}', [OrderController::class, 'show'])->name('orders.show');
-    Route::patch('/commandes/{id}/statut', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+    Route::middleware([EnsureAdmin::class])->group(function () {
 
-    // Catalogue / Produits
-    Route::get('/produits', [ProductController::class, 'index'])->name('products.index');
-    Route::get('/produits/creer', [ProductController::class, 'create'])->name('products.create');
-    Route::post('/produits', [ProductController::class, 'store'])->name('products.store');
-    Route::get('/produits/{id}/modifier', [ProductController::class, 'edit'])->name('products.edit');
-    Route::patch('/produits/{id}', [ProductController::class, 'update'])->name('products.update');
-    Route::delete('/produits/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+        // Dashboard
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Inventaire
-    Route::get('/inventaire', [InventoryController::class, 'index'])->name('inventory.index');
-    Route::patch('/inventaire/{id}', [InventoryController::class, 'update'])->name('inventory.update');
+        // Commandes
+        Route::get('/commandes', [OrderController::class, 'index'])->name('orders.index');
+        Route::get('/commandes/{id}', [OrderController::class, 'show'])->name('orders.show');
+Route::patch('/commandes/{id}/statut', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+Route::post('/commandes/{id}/statut', [OrderController::class, 'updateStatus'])->name('orders.updateStatus.post');
 
-    // Clients
-    Route::get('/clients', [CustomerController::class, 'index'])->name('customers.index');
-    Route::get('/clients/{id}', [CustomerController::class, 'show'])->name('customers.show');
+        // Catalogue / Produits
+        Route::get('/produits', [ProductController::class, 'index'])->name('products.index');
+        Route::get('/produits/creer', [ProductController::class, 'create'])->name('products.create');
+        Route::post('/produits', [ProductController::class, 'store'])->name('products.store');
+        Route::get('/produits/{id}/modifier', [ProductController::class, 'edit'])->name('products.edit');
+        Route::patch('/produits/{id}', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/produits/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+        // Inventaire
+        Route::get('/inventaire', [InventoryController::class, 'index'])->name('inventory.index');
+        Route::patch('/inventaire/{id}', [InventoryController::class, 'update'])->name('inventory.update');
+
+        // Clients
+        Route::get('/clients', [CustomerController::class, 'index'])->name('customers.index');
+        Route::get('/clients/{id}', [CustomerController::class, 'show'])->name('customers.show');
+    });
 });

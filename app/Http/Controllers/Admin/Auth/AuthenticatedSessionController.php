@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -10,7 +10,7 @@ class AuthenticatedSessionController extends Controller
 {
     public function create()
     {
-        return view('pages.auth.login');
+        return view('pages.admin.login');
     }
 
     public function store(Request $request)
@@ -20,20 +20,26 @@ class AuthenticatedSessionController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (Auth::guard('admin')->attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended(route('profile.index'));
+
+            $admin = Auth::guard('admin')->user();
+            if ($admin && $admin->role === 'admin') {
+                return redirect()->intended(route('admin.dashboard'));
+            }
+
+            Auth::guard('admin')->logout();
         }
 
         return back()->withInput($request->only('email'))
-            ->withErrors(['email' => 'Ces identifiants ne correspondent pas à nos enregistrements.']);
+            ->withErrors(['email' => 'Identifiants administrateur invalides.']);
     }
 
     public function destroy(Request $request)
     {
-        Auth::logout();
+        Auth::guard('admin')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('home');
+        return redirect()->route('admin.login');
     }
 }

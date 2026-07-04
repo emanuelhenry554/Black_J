@@ -29,6 +29,8 @@
                 <label class="text-caption uppercase tracking-widest text-on-surface-variant font-semibold">Catégorie *</label>
                 <select name="categorie_id" required class="px-4 py-3 bg-surface-container border border-outline-variant focus:border-secondary outline-none">
                     <option value="">Sélectionnez...</option>
+                    <option value="">JEAN...</option>
+                    <option value="">Sélectionnez...</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}">{{ $category->nom }}</option>
                     @endforeach

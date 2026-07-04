@@ -8,7 +8,6 @@ use App\Models\Category;
 use App\Models\ProductColor;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -28,54 +27,56 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nom' => 'required|string|max:255',
-            'slug' => 'required|string|unique:products,slug',
-            'prix' => 'required|integer',
+            'nom'          => 'required|string|max:255',
+            'slug'         => 'required|string|unique:products,slug',
+            'prix'         => 'required|integer',
             'categorie_id' => 'required|exists:categories,id',
         ]);
 
         $product = Product::create([
-            'nom' => $request->nom,
-            'slug' => $request->slug,
-            'prix' => $request->prix,
-            'categorie_id' => $request->categorie_id,
-            'matiere' => $request->matiere,
-            'description' => $request->description,
-            'description_courte' => $request->description_courte,
-            'image' => $request->image,
-            'edition_limitee' => $request->has('edition_limitee'),
-            'nouveau' => $request->has('nouveau'),
-            'is_featured' => $request->has('is_featured'),
-            'is_new' => $request->has('is_new'),
-            'stock' => $request->stock ?? 0,
-            'dimensions' => $request->dimensions,
-            'caracteristiques' => $request->caracteristiques,
+            'nom'               => $request->nom,
+            'slug'              => $request->slug,
+            'prix'              => $request->prix,
+            'categorie_id'      => $request->categorie_id,
+            'matiere'           => $request->matiere,
+            'description'       => $request->description,
+            'description_courte'=> $request->description_courte,
+            'edition_limitee'   => $request->has('edition_limitee'),
+            'nouveau'           => $request->has('nouveau'),
+            'is_featured'       => $request->has('is_featured'),
+            'is_new'            => $request->has('is_new'),
+            'stock'             => $request->stock ?? 0,
+            'dimensions'        => $request->dimensions,
+            'caracteristiques'  => $request->caracteristiques,
         ]);
 
-        // Handle Multiple Images
+        // Gestion des images
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $file) {
                 $path = $file->store('products', 'public');
                 ProductImage::create([
                     'product_id' => $product->id,
-                    'path' => $path,
+                    'path'       => $path,
                     'is_primary' => ($index === 0),
                 ]);
-
                 if ($index === 0) {
                     $product->update(['image' => $path]);
                 }
             }
         }
 
-        // Handle Colors
+        // Gestion des couleurs
         if ($request->has('colors')) {
             foreach ($request->colors as $color) {
-                ProductColor::create([
-                    'product_id' => $product->id,
-                    'name' => $color['name'],
-                    'hex' => $color['hex'],
-                ]);
+                if (!empty($color['name'])) {
+                    ProductColor::create([
+                        'product_id'   => $product->id,
+                        'name'         => $color['name'],
+                        'hex'          => $color['hex'] ?? '#000000',
+                        'stock'        => $color['stock'] ?? 0,
+                        'is_available' => true,
+                    ]);
+                }
             }
         }
 
@@ -84,7 +85,7 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $product = Product::with(['category', 'colors', 'images'])->findOrFail($id);
+        $product    = Product::with(['category', 'colors', 'images'])->findOrFail($id);
         $categories = Category::all();
         return view('pages.admin.products.edit', compact('product', 'categories'));
     }
@@ -94,29 +95,56 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         $request->validate([
-            'nom' => 'required|string|max:255',
-            'slug' => 'required|string|unique:products,slug,' . $id,
-            'prix' => 'required|integer',
+            'nom'          => 'required|string|max:255',
+            'slug'         => 'required|string|unique:products,slug,' . $id,
+            'prix'         => 'required|integer',
             'categorie_id' => 'required|exists:categories,id',
         ]);
 
         $product->update([
-            'nom' => $request->nom,
-            'slug' => $request->slug,
-            'prix' => $request->prix,
-            'categorie_id' => $request->categorie_id,
-            'matiere' => $request->matiere,
-            'description' => $request->description,
-            'description_courte' => $request->description_courte,
-            'image' => $request->image,
-            'edition_limitee' => $request->has('edition_limitee'),
-            'nouveau' => $request->has('nouveau'),
-            'is_featured' => $request->has('is_featured'),
-            'is_new' => $request->has('is_new'),
-            'stock' => $request->stock ?? 0,
-            'dimensions' => $request->dimensions,
-            'caracteristiques' => $request->caracteristiques,
+            'nom'               => $request->nom,
+            'slug'              => $request->slug,
+            'prix'              => $request->prix,
+            'categorie_id'      => $request->categorie_id,
+            'matiere'           => $request->matiere,
+            'description'       => $request->description,
+            'description_courte'=> $request->description_courte,
+            'edition_limitee'   => $request->has('edition_limitee'),
+            'nouveau'           => $request->has('nouveau'),
+            'is_featured'       => $request->has('is_featured'),
+            'is_new'            => $request->has('is_new'),
+            'stock'             => $request->stock ?? 0,
+            'dimensions'        => $request->dimensions,
+            'caracteristiques'  => $request->caracteristiques,
         ]);
+
+        // Gestion des nouvelles images
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $index => $file) {
+                $path = $file->store('products', 'public');
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'path'       => $path,
+                    'is_primary' => false,
+                ]);
+            }
+        }
+
+        // Gestion des couleurs
+        if ($request->has('colors')) {
+            $product->colors()->delete();
+            foreach ($request->colors as $color) {
+                if (!empty($color['name'])) {
+                    ProductColor::create([
+                        'product_id'   => $product->id,
+                        'name'         => $color['name'],
+                        'hex'          => $color['hex'] ?? '#000000',
+                        'stock'        => $color['stock'] ?? 0,
+                        'is_available' => true,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'Produit mis à jour.');
     }
