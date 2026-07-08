@@ -10,7 +10,7 @@
 
     <div class="bg-surface border border-outline-variant/30 rounded-lg overflow-hidden shadow-card">
         <table class="w-full text-left border-collapse">
-            <thead class="bg-surface-container text-caption uppercase tracking-widest text-on-surface-variant font-semibold">
+            <thead class="bg-surface text-caption uppercase tracking-widest text-on-surface-variant font-semibold">
                 <tr class="border-b border-outline-variant/30">
                     <th class="px-6 py-3">Produit</th>
                     <th class="px-6 py-3">Quantité actuelle</th>
@@ -20,7 +20,7 @@
             </thead>
             <tbody class="divide-y divide-outline-variant/30">
                 @forelse($products as $product)
-                <tr class="hover:bg-surface-container/50 transition-colors">
+                <tr class="hover:bg-surface/50 transition-colors">
                     <td class="px-6 py-4 font-semibold text-primary">{{ $product->nom }}</td>
                     <td class="px-6 py-4 text-on-surface-variant font-bold">{{ $product->stock }} pcs</td>
                     <td class="px-6 py-4">
@@ -64,7 +64,7 @@
             <div class="flex flex-col gap-2">
                 <label class="text-caption uppercase tracking-widest text-on-surface-variant font-semibold">Nouvelle quantité</label>
                 <input type="number" name="stock" id="modal-stock" required min="0"
-                       class="px-4 py-3 bg-surface-container border border-outline-variant focus:border-secondary outline-none">
+                       class="px-4 py-3 bg-surface border border-outline-variant focus:border-secondary outline-none">
             </div>
             <div class="flex justify-end gap-3 pt-4">
                 <button type="button" onclick="closeUpdateModal()" class="px-6 py-2 text-sm font-semibold text-on-surface-variant hover:text-primary">Annuler</button>

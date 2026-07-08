@@ -8,7 +8,7 @@
     </div>
 
     @if($products->isEmpty())
-        <div class="text-center py-20 bg-surface-container-low border border-dashed border-outline-variant/50 rounded-lg">
+        <div class="text-center py-20 bg-surface border border-dashed border-outline-variant/50 rounded-lg">
             <span class="material-symbols-outlined text-6xl text-outline-variant mb-4">favorite</span>
             <p class="font-sans text-body text-on-surface-variant mb-6">Votre liste de souhaits est encore vide.</p>
             <a href="{{ route('boutique.index') }}" class="btn-primary">Explorer la boutique</a>
@@ -18,11 +18,11 @@
             @foreach($products as $product)
             <div class="bg-surface border border-outline-variant/30 p-4 rounded-lg shadow-card flex flex-col gap-4 group">
                 <div class="flex items-start justify-between gap-4">
-                    <div class="w-24 h-28 bg-surface-container rounded overflow-hidden flex-shrink-0">
+                    <div class="w-24 h-28 bg-surface rounded overflow-hidden flex-shrink-0">
                         @if($product->image)
                         <img src="{{ asset('img/'.$product->image) }}" alt="{{ $product->nom }}" class="w-full h-full object-cover">
                         @else
-                        <div class="w-full h-full bg-surface-dim"></div>
+                        <div class="w-full h-full bg-surface"></div>
                         @endif
                     </div>
                     <form method="POST" action="{{ route('profile.wishlist.remove', $product) }}" class="self-start">

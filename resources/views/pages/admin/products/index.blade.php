@@ -18,7 +18,7 @@
 
     <div class="bg-surface border border-outline-variant/30 rounded-lg overflow-hidden shadow-card">
         <table class="w-full text-left border-collapse">
-            <thead class="bg-surface-container text-caption uppercase tracking-widest text-on-surface-variant font-semibold">
+            <thead class="bg-surface text-caption uppercase tracking-widest text-on-surface-variant font-semibold">
                 <tr>
                     <th class="px-6 py-3">Produit</th>
                     <th class="px-6 py-3">Catégorie</th>
@@ -29,12 +29,12 @@
             </thead>
             <tbody class="divide-y divide-outline-variant/30">
                 @forelse($products as $product)
-                <tr class="hover:bg-surface-container/50 transition-colors">
+                <tr class="hover:bg-surface/50 transition-colors">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-surface-dim rounded overflow-hidden">
+                            <div class="w-10 h-10 bg-surface rounded overflow-hidden">
                                 @if($product->image)
-                                    <img src="{{ asset('storage/' . $product->image) }}"
+                                    <img src="{{ $product->image_url }}"
                                          alt="{{ $product->nom }}"
                                          class="w-full h-full object-cover">
                                 @else

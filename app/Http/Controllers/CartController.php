@@ -36,7 +36,7 @@ class CartController extends Controller
 
         $product = Product::with(['images', 'colors'])->findOrFail($data['product_id']);
         $quantity = $data['quantity'] ?? 1;
-        $color = $product->colors->firstWhere('id', $data['color_id']) ?? null;
+        $color = $product->colors->firstWhere('id', $data['color_id'] ?? null) ?? null;
 
         $key = $product->id . '-' . ($color->id ?? '0');
         $cart = $this->getCart();
@@ -44,6 +44,7 @@ class CartController extends Controller
         if (isset($cart[$key])) {
             $cart[$key]['quantite'] += $quantity;
         } else {
+            $firstImage = $product->images->first();
             $cart[$key] = [
                 'id' => $key,
                 'product_id' => $product->id,
@@ -51,7 +52,8 @@ class CartController extends Controller
                 'nom' => $product->nom,
                 'prix' => $product->prix,
                 'quantite' => $quantity,
-                'image' => optional($product->images->first())->path ?? $product->image,
+                'image' => $color?->image_path ?: $firstImage?->path ?? $product->image,
+                'image_url' => $color?->image_url ?: $firstImage?->image_url ?? $product->image_url,
                 'couleur' => $color->name ?? null,
                 'color_id' => $color->id ?? null,
             ];

@@ -20,7 +20,7 @@
         @endphp
         <div class="bg-surface border border-outline-variant/30 p-6 rounded-lg shadow-card flex flex-col md:flex-row justify-between gap-6">
             <div class="flex gap-4">
-                <div class="w-16 h-16 bg-surface-container rounded overflow-hidden flex-shrink-0">
+                <div class="w-16 h-16 bg-surface rounded overflow-hidden flex-shrink-0">
                     <span class="material-symbols-outlined w-full h-full flex items-center justify-center text-outline-variant">shopping_bag</span>
                 </div>
                 <div class="flex flex-col gap-1">

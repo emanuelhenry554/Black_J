@@ -26,19 +26,19 @@
         {{-- LEFT: Images --}}
         <div class="md:col-span-7 flex flex-col gap-4">
             {{-- Main image --}}
-            <div class="relative aspect-[4/5] overflow-hidden bg-surface-container-low group" id="main-image-container">
+            <div class="relative overflow-hidden group" id="main-image-container">
                 @if(isset($product->images) && $product->images->isNotEmpty())
                     <img id="main-image"
-                         src="{{ asset('img/'.$product->images->first()->path) }}"
+                         src="{{ $product->images->first()->image_url }}"
                          alt="{{ $product->nom }}"
-                         class="w-full h-full object-cover transition-opacity duration-300">
+                         class="w-full h-auto block transition-opacity duration-300">
                 @elseif(isset($product->image))
                     <img id="main-image"
-                         src="{{ asset('img/'.$product->image) }}"
+                         src="{{ $product->image_url }}"
                          alt="{{ $product->nom }}"
-                         class="w-full h-full object-cover">
+                         class="w-full h-auto block">
                 @else
-                    <div class="w-full h-full bg-surface-dim flex items-center justify-center">
+                    <div class="w-full aspect-[4/5] bg-surface flex items-center justify-center">
                         <span class="material-symbols-outlined text-6xl text-outline-variant">shopping_bag</span>
                     </div>
                 @endif
@@ -50,10 +50,10 @@
             @if(isset($product->images) && $product->images->count() > 1)
             <div class="grid grid-cols-4 gap-3">
                 @foreach($product->images as $i => $img)
-                <button onclick="changeMainImage('{{ asset('img/'.$img->path) }}')"
-                        class="aspect-square overflow-hidden bg-surface-container-low border-2 transition-colors
+                <button onclick="changeMainImage('{{ $img->image_url }}')"
+                        class="aspect-square overflow-hidden bg-surface border-2 transition-colors
                                {{ $i === 0 ? 'border-secondary' : 'border-transparent hover:border-outline-variant' }}">
-                    <img src="{{ asset('img/'.$img->path) }}" alt="" class="w-full h-full object-cover">
+                    <img src="{{ $img->image_url }}" alt="" class="w-full h-full object-contain">
                 </button>
                 @endforeach
             </div>
@@ -89,12 +89,12 @@
                         <button
                             title="{{ $color->name }}"
                             data-id="{{ $color->id }}"
-                            data-image="{{ $color->image_path ? asset('img/'.$color->image_path) : '' }}"
+                            data-image="{{ $color->image_url ?? '' }}"
                             style="background-color: {{ $color->hex }}"
                             class="color-swatch w-8 h-8 rounded-full border-2 transition-all hover:scale-110 focus:outline-none {{ $loop->first ? 'border-secondary' : 'border-transparent' }}"
                             onclick="selectColor(this)">
                         </button>
-                        @endforeach
+                    @endforeach
                     </div>
                 </div>
                 @endif
@@ -146,7 +146,7 @@
                     </button>
                 </form>
                 @else
-                <button disabled class="w-full py-4 bg-surface-dim text-on-surface-variant text-caption uppercase tracking-widest font-sans font-semibold cursor-not-allowed">
+                <button disabled class="w-full py-4 bg-surface text-on-surface-variant text-caption uppercase tracking-widest font-sans font-semibold cursor-not-allowed">
                     Indisponible
                 </button>
                 @endif
@@ -210,12 +210,12 @@
             @foreach($relatedProducts as $rel)
             <div class="product-card group">
                 <a href="{{ route('boutique.show', $rel->slug ?? $rel->id) }}"
-                   class="block relative aspect-[3/4] overflow-hidden bg-surface-container-low mb-3">
+                   class="block relative overflow-hidden bg-surface mb-3 shadow-card rounded-sm transition-shadow hover:shadow-luxury">
                     @if($rel->image)
-                    <img src="{{ asset('img/'.$rel->image) }}" alt="{{ $rel->nom }}"
-                         class="card-img w-full h-full object-cover">
+                    <img src="{{ $rel->image_url }}" alt="{{ $rel->nom }}"
+                         class="card-img w-full h-auto block">
                     @else
-                    <div class="card-img w-full h-full bg-surface-dim"></div>
+                    <div class="card-img w-full aspect-[3/4] bg-surface"></div>
                     @endif
                 </a>
                 <h3 class="font-serif text-h3 text-primary group-hover:text-secondary transition-colors">{{ $rel->nom }}</h3>
@@ -257,6 +257,18 @@
         if (imageSrc) {
             changeMainImage(imageSrc);
         }
+    }
+
+    function initializeColorSelection() {
+        const firstColor = document.querySelector('.color-swatch.border-secondary');
+        if (firstColor) {
+            firstColor.click();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initializeColorSelection);
+    if (document.readyState === 'interactive' || document.readyState === 'complete') {
+        initializeColorSelection();
     }
 </script>
 @endpush

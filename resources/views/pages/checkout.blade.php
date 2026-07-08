@@ -15,7 +15,7 @@
         <div class="flex items-center flex-shrink-0">
             <div class="flex items-center gap-2">
                 <div class="w-7 h-7 flex items-center justify-center text-caption font-sans font-bold
-                            {{ $i < 2 ? 'bg-primary text-on-primary' : ($i === 2 ? 'bg-secondary text-on-secondary' : 'bg-surface-container text-on-surface-variant') }}">
+                            {{ $i < 2 ? 'bg-primary text-on-primary' : ($i === 2 ? 'bg-secondary text-on-secondary' : 'bg-surface text-on-surface-variant') }}">
                     @if($i < 2)
                         <span class="material-symbols-outlined text-[14px]">check</span>
                     @else
@@ -40,7 +40,7 @@
             <div class="lg:col-span-2 flex flex-col gap-8">
 
                 {{-- Delivery --}}
-                <div class="bg-surface-container-low p-6">
+                <div class="bg-surface p-6">
                     <h2 class="font-serif text-h2 text-primary mb-6 pb-4 border-b border-outline-variant/30">Informations de livraison</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         @foreach([
@@ -96,7 +96,7 @@
                 </div>
 
                 {{-- Payment --}}
-                <div class="bg-surface-container-low p-6">
+                <div class="bg-surface p-6">
                     <h2 class="font-serif text-h2 text-primary mb-6 pb-4 border-b border-outline-variant/30">Mode de paiement</h2>
                     <div class="flex flex-col gap-3">
                         @foreach([
@@ -120,16 +120,35 @@
 
             {{-- RIGHT: Summary --}}
             <div class="lg:col-span-1">
-                <div class="bg-surface-container-low p-6 sticky top-32">
+                <div class="bg-surface p-6 sticky top-32">
                     <h2 class="font-serif text-h2 text-primary mb-6 pb-4 border-b border-outline-variant/30">Ma commande</h2>
 
                     @if(isset($cartItems))
                     <div class="flex flex-col gap-3 mb-6">
                         @foreach($cartItems as $item)
+                        @php
+                            $checkoutImage = $item['image_url'] ?? null;
+                            if (empty($checkoutImage)) {
+                                $rawImage = $item['image'] ?? null;
+                                if ($rawImage) {
+                                    if (str_starts_with($rawImage, 'http://') || str_starts_with($rawImage, 'https://')) {
+                                        $checkoutImage = $rawImage;
+                                    } elseif (str_starts_with($rawImage, 'storage/')) {
+                                        $checkoutImage = asset($rawImage);
+                                    } elseif (str_contains($rawImage, '/')) {
+                                        $checkoutImage = asset('storage/' . $rawImage);
+                                    } else {
+                                        $checkoutImage = asset('img/' . $rawImage);
+                                    }
+                                } else {
+                                    $checkoutImage = asset('img/sacs-blac-joyaux.jpg');
+                                }
+                            }
+                        @endphp
                         <div class="flex items-start gap-3">
-                            <div class="w-14 h-16 flex-shrink-0 bg-surface-dim overflow-hidden">
+                            <div class="w-14 h-16 flex-shrink-0 bg-surface overflow-hidden">
                                 @if($item['image'] ?? false)
-                                <img src="{{ asset('img/'.$item['image']) }}" alt="{{ $item['nom'] }}" class="w-full h-full object-cover">
+                                <img src="{{ $checkoutImage }}" alt="{{ $item['nom'] }}" class="w-full h-full object-cover">
                                 @endif
                             </div>
                             <div class="flex-grow min-w-0">

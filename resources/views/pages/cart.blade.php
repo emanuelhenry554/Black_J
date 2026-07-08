@@ -19,13 +19,32 @@
         {{-- Cart items --}}
         <div class="lg:col-span-2 flex flex-col gap-0 divide-y divide-outline-variant/30">
             @foreach($cartItems as $item)
+            @php
+                $cartImage = $item['image_url'] ?? null;
+                if (empty($cartImage)) {
+                    $rawImage = $item['image'] ?? null;
+                    if ($rawImage) {
+                        if (str_starts_with($rawImage, 'http://') || str_starts_with($rawImage, 'https://')) {
+                            $cartImage = $rawImage;
+                        } elseif (str_starts_with($rawImage, 'storage/')) {
+                            $cartImage = asset($rawImage);
+                        } elseif (str_contains($rawImage, '/')) {
+                            $cartImage = asset('storage/' . $rawImage);
+                        } else {
+                            $cartImage = asset('img/' . $rawImage);
+                        }
+                    } else {
+                        $cartImage = asset('img/sacs-blac-joyaux.jpg');
+                    }
+                }
+            @endphp
             <div class="flex gap-5 py-6">
                 <a href="{{ route('boutique.show', $item['slug'] ?? $item['id']) }}"
-                   class="flex-shrink-0 w-24 h-28 bg-surface-container-low overflow-hidden">
+                   class="flex-shrink-0 w-24 h-28 bg-surface overflow-hidden">
                     @if($item['image'] ?? false)
-                    <img src="{{ asset('img/'.$item['image']) }}" alt="{{ $item['nom'] }}" class="w-full h-full object-cover">
+                    <img src="{{ $cartImage }}" alt="{{ $item['nom'] }}" class="w-full h-full object-cover">
                     @else
-                    <div class="w-full h-full bg-surface-dim"></div>
+                    <div class="w-full h-full bg-surface"></div>
                     @endif
                 </a>
                 <div class="flex flex-col gap-2 flex-grow min-w-0">
@@ -47,7 +66,7 @@
                         <form method="POST" action="{{ route('cart.update', $item['id']) }}">
                             @csrf @method('PATCH')
                             <input type="hidden" name="quantity" value="{{ max(1, $item['quantite'] - 1) }}">
-                            <button type="submit" class="w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors">
+                            <button type="submit" class="w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface transition-colors">
                                 <span class="material-symbols-outlined text-[18px]">remove</span>
                             </button>
                         </form>
@@ -55,7 +74,7 @@
                         <form method="POST" action="{{ route('cart.update', $item['id']) }}">
                             @csrf @method('PATCH')
                             <input type="hidden" name="quantity" value="{{ $item['quantite'] + 1 }}">
-                            <button type="submit" class="w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors">
+                            <button type="submit" class="w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface transition-colors">
                                 <span class="material-symbols-outlined text-[18px]">add</span>
                             </button>
                         </form>
@@ -67,7 +86,7 @@
 
         {{-- Order summary --}}
         <div class="lg:col-span-1">
-            <div class="bg-surface-container-low p-6 sticky top-32">
+            <div class="bg-surface p-6 sticky top-32">
                 <h2 class="font-serif text-h2 text-primary mb-6 pb-4 border-b border-outline-variant/30">Récapitulatif</h2>
                 <div class="flex flex-col gap-3 mb-6">
                     <div class="flex justify-between">

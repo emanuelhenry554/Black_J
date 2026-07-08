@@ -3,19 +3,19 @@
 @php $hideContactBar = true; @endphp
 
 @section('content')
-<div class="min-h-[80vh] flex items-center justify-center py-20 relative bg-cover bg-center" style="background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('{{ asset('img/bg.jpeg') }}');">
+<div class="min-h-[80vh] flex items-center justify-center py-20 relative bg-surface">
     <div class="w-full max-w-md mx-auto px-px-mobile relative z-10">
 
         <div class="text-center mb-10">
             <a href="{{ route('home') }}" class="inline-flex flex-col items-center">
-                <span class="font-serif text-5xl text-secondary" style="font-family:'Libre Caslon Text',serif">Bj</span>
-                <span class="font-sans text-xs tracking-[0.25em] uppercase text-white/90 mt-1 font-semibold">Blac Joyaux</span>
+                <img src="{{ asset('img/logo.png') }}" alt="Blac Joyaux Logo" class="h-16 md:h-20 w-auto object-contain">
+                <span class="font-sans text-xs tracking-[0.25em] uppercase text-on-surface-variant mt-3 font-semibold">Blac Joyaux</span>
             </a>
-            <h1 class="font-serif text-h2 text-white mt-6">Créer un compte</h1>
-            <p class="font-sans text-body text-white/70 mt-2">Rejoignez le cercle Blac Joyaux.</p>
+            <h1 class="font-serif text-h2 text-primary mt-6">Créer un compte</h1>
+            <p class="font-sans text-body text-on-surface-variant mt-2">Rejoignez le cercle Blac Joyaux.</p>
         </div>
 
-        <div class="bg-surface-container-lowest border border-outline-variant/30 p-8 shadow-luxury">
+        <div class="bg-surfaceest border border-outline-variant/30 p-8 shadow-luxury">
             <form method="POST" action="{{ route('register') }}" class="flex flex-col gap-6">
                 @csrf
 

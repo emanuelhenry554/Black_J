@@ -36,7 +36,7 @@
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead>
-                    <tr class="border-b border-outline-variant/30 bg-surface-container-low">
+                    <tr class="border-b border-outline-variant/30 bg-surface">
                         @foreach(['#', 'Client', 'Total', 'Statut', ''] as $h)
                         <th class="text-left text-caption uppercase tracking-widest text-on-surface-variant px-4 py-3 font-sans font-semibold">{{ $h }}</th>
                         @endforeach
@@ -44,7 +44,7 @@
                 </thead>
                 <tbody class="divide-y divide-outline-variant/20">
                     @forelse($recentOrders ?? [] as $order)
-                    <tr class="hover:bg-surface-container-low transition-colors">
+                    <tr class="hover:bg-surface transition-colors">
                         <td class="px-4 py-3 font-sans text-sm font-semibold text-primary">#{{ $order->numero }}</td>
                         <td class="px-4 py-3">
                             <p class="font-sans text-sm font-semibold text-primary">{{ $order->client->name ?? 'N/A' }}</p>

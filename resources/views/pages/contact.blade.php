@@ -4,7 +4,7 @@
 @section('meta_description', 'Contactez la maison Blac Joyaux pour toute demande d\'information ou commande personnalisée.')
 
 @section('content')
-<div class="bg-surface-container-low border-b border-outline-variant/30 py-10 pattern-bg">
+<div class="bg-surface border-b border-outline-variant/30 py-10">
     <div class="max-w-site mx-auto px-px-mobile md:px-px-desktop text-center">
         <p class="text-caption uppercase tracking-widest text-secondary font-sans font-semibold mb-3">Nous contacter</p>
         <h1 class="font-serif text-h1 text-primary">Contact</h1>
@@ -55,20 +55,20 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div class="flex flex-col gap-2">
                         <label class="text-caption uppercase tracking-widest text-on-surface-variant font-sans font-semibold">Nom complet</label>
-                        <input type="text" name="name" placeholder="Jean Dupont" class="input-gold bg-surface-container px-4 py-3 border border-outline-variant focus:ring-0">
+                        <input type="text" name="name" placeholder="Jean Dupont" class="input-gold bg-surface px-4 py-3 border border-outline-variant focus:ring-0">
                     </div>
                     <div class="flex flex-col gap-2">
                         <label class="text-caption uppercase tracking-widest text-on-surface-variant font-sans font-semibold">Email</label>
-                        <input type="email" name="email" placeholder="email@exemple.com" class="input-gold bg-surface-container px-4 py-3 border border-outline-variant focus:ring-0">
+                        <input type="email" name="email" placeholder="email@exemple.com" class="input-gold bg-surface px-4 py-3 border border-outline-variant focus:ring-0">
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-caption uppercase tracking-widest text-on-surface-variant font-sans font-semibold">Sujet</label>
-                    <input type="text" name="subject" placeholder="Demande d'information" class="input-gold bg-surface-container px-4 py-3 border border-outline-variant focus:ring-0">
+                    <input type="text" name="subject" placeholder="Demande d'information" class="input-gold bg-surface px-4 py-3 border border-outline-variant focus:ring-0">
                 </div>
                 <div class="flex flex-col gap-2">
                     <label class="text-caption uppercase tracking-widest text-on-surface-variant font-sans font-semibold">Message</label>
-                    <textarea name="message" rows="5" placeholder="Votre message..." class="input-gold bg-surface-container px-4 py-3 border border-outline-variant focus:ring-0"></textarea>
+                    <textarea name="message" rows="5" placeholder="Votre message..." class="input-gold bg-surface px-4 py-3 border border-outline-variant focus:ring-0"></textarea>
                 </div>
                 <button type="submit" class="btn-primary w-full">Envoyer le message</button>
             </form>

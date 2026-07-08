@@ -27,10 +27,15 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nom'          => 'required|string|max:255',
-            'slug'         => 'required|string|unique:products,slug',
-            'prix'         => 'required|integer',
-            'categorie_id' => 'required|exists:categories,id',
+            'nom'              => 'required|string|max:255',
+            'slug'             => 'required|string|unique:products,slug',
+            'prix'             => 'required|integer',
+            'categorie_id'     => 'required|exists:categories,id',
+            'images.*'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'colors.*.name'    => 'nullable|string|max:255',
+            'colors.*.hex'     => 'nullable|string|max:7',
+            'colors.*.stock'   => 'nullable|integer|min:0',
+            'colors.*.image'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $product = Product::create([
@@ -67,13 +72,18 @@ class ProductController extends Controller
 
         // Gestion des couleurs
         if ($request->has('colors')) {
-            foreach ($request->colors as $color) {
+            foreach ($request->colors as $index => $color) {
                 if (!empty($color['name'])) {
+                    $imagePath = null;
+                    if ($request->hasFile("colors.$index.image")) {
+                        $imagePath = $request->file("colors.$index.image")->store('products/colors', 'public');
+                    }
                     ProductColor::create([
                         'product_id'   => $product->id,
                         'name'         => $color['name'],
                         'hex'          => $color['hex'] ?? '#000000',
                         'stock'        => $color['stock'] ?? 0,
+                        'image_path'   => $imagePath,
                         'is_available' => true,
                     ]);
                 }
@@ -95,10 +105,17 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         $request->validate([
-            'nom'          => 'required|string|max:255',
-            'slug'         => 'required|string|unique:products,slug,' . $id,
-            'prix'         => 'required|integer',
-            'categorie_id' => 'required|exists:categories,id',
+            'nom'              => 'required|string|max:255',
+            'slug'             => 'required|string|unique:products,slug,' . $id,
+            'prix'             => 'required|integer',
+            'categorie_id'     => 'required|exists:categories,id',
+            'image'            => 'nullable|string|max:255',
+            'images.*'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'colors.*.id'      => 'nullable|integer|exists:product_colors,id',
+            'colors.*.name'    => 'nullable|string|max:255',
+            'colors.*.hex'     => 'nullable|string|max:7',
+            'colors.*.stock'   => 'nullable|integer|min:0',
+            'colors.*.image'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $product->update([
@@ -106,6 +123,7 @@ class ProductController extends Controller
             'slug'              => $request->slug,
             'prix'              => $request->prix,
             'categorie_id'      => $request->categorie_id,
+            'image'             => $request->image,
             'matiere'           => $request->matiere,
             'description'       => $request->description,
             'description_courte'=> $request->description_courte,
@@ -127,23 +145,53 @@ class ProductController extends Controller
                     'path'       => $path,
                     'is_primary' => false,
                 ]);
+                if (! $product->image && $index === 0) {
+                    $product->update(['image' => $path]);
+                }
             }
         }
 
         // Gestion des couleurs
+        $remainingColorIds = [];
         if ($request->has('colors')) {
-            $product->colors()->delete();
-            foreach ($request->colors as $color) {
-                if (!empty($color['name'])) {
-                    ProductColor::create([
-                        'product_id'   => $product->id,
+            foreach ($request->colors as $index => $color) {
+                if (empty($color['name'])) {
+                    continue;
+                }
+
+                $imagePath = $color['existing_image_path'] ?? null;
+                if ($request->hasFile("colors.$index.image")) {
+                    $imagePath = $request->file("colors.$index.image")->store('products/colors', 'public');
+                }
+
+                if (!empty($color['id']) && $existingColor = ProductColor::where('product_id', $product->id)->find($color['id'])) {
+                    $existingColor->update([
                         'name'         => $color['name'],
                         'hex'          => $color['hex'] ?? '#000000',
                         'stock'        => $color['stock'] ?? 0,
+                        'image_path'   => $imagePath,
                         'is_available' => true,
                     ]);
+                    $remainingColorIds[] = $existingColor->id;
+                    continue;
                 }
+
+                $newColor = ProductColor::create([
+                    'product_id'   => $product->id,
+                    'name'         => $color['name'],
+                    'hex'          => $color['hex'] ?? '#000000',
+                    'stock'        => $color['stock'] ?? 0,
+                    'image_path'   => $imagePath,
+                    'is_available' => true,
+                ]);
+                $remainingColorIds[] = $newColor->id;
             }
+        }
+
+        if (count($remainingColorIds) > 0) {
+            $product->colors()->whereNotIn('id', $remainingColorIds)->delete();
+        } else {
+            $product->colors()->delete();
         }
 
         return redirect()->route('admin.products.index')->with('success', 'Produit mis à jour.');

@@ -11,10 +11,21 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
+        Category::whereNotIn('slug', ['do-dominique', 'joyaux-de-bla'])->delete();
+
         $categories = [
-            ['nom' => 'Sacs à main', 'slug' => 'sacs-a-main'],
-            ['nom' => 'Élégance', 'slug' => 'elegance'],
-            ['nom' => 'Luxe', 'slug' => 'luxe'],
+            [
+                'nom' => 'DO - Dominique',
+                'slug' => 'do-dominique',
+                'image' => 'Collection-Sacs-Blac-Joyaux-Do-Dominique-Ouattara.jpg',
+                'description' => "L'expression pure de l'élégance ivoirienne. Des silhouettes fortes et un cuir noble pour une allure souveraine."
+            ],
+            [
+                'nom' => 'Joyaux de Bla',
+                'slug' => 'joyaux-de-bla',
+                'image' => 'presentation-sac-blac-joyaux-croco-violet-.jpg',
+                'description' => "L'audace et la couleur au service du luxe. Chaque pièce est un bijou de caractère et de passion."
+            ],
         ];
 
         $images = [
@@ -46,21 +57,10 @@ class ProductSeeder extends Seeder
         $imageIndex = 0;
 
         foreach ($categories as $catData) {
-            // Map category fields to actual DB columns (nom vs name)
-            $catPayload = [];
-            if (\Illuminate\Support\Facades\Schema::hasColumn('categories', 'nom')) {
-                $catPayload['nom'] = $catData['nom'];
-            } else {
-                $catPayload['name'] = $catData['nom'];
-            }
-            $catPayload['slug'] = $catData['slug'];
+            $category = Category::updateOrCreate(['slug' => $catData['slug']], $catData);
 
-            $category = Category::updateOrCreate(['slug' => $catPayload['slug']], $catPayload);
-
-            // Determine product foreign key name (categorie_id vs category_id)
             $categoryKey = \Illuminate\Support\Facades\Schema::hasColumn('products', 'categorie_id') ? 'categorie_id' : 'category_id';
 
-            // Create 3 products for each category
             for ($i = 1; $i <= 3; $i++) {
                 $nom = "Produit {$catData['nom']} $i";
 
@@ -70,7 +70,6 @@ class ProductSeeder extends Seeder
                 $productPayload = [];
                 $productPayload[$categoryKey] = $category->id;
 
-                // Map product name field (nom vs name)
                 if (\Illuminate\Support\Facades\Schema::hasColumn('products', 'nom')) {
                     $productPayload['nom'] = $nom;
                 } else {
@@ -78,7 +77,6 @@ class ProductSeeder extends Seeder
                 }
 
                 $productPayload['slug'] = Str::slug($nom) . '-' . $i;
-                // prix exists in this schema
                 $productPayload['prix'] = rand(50000, 500000);
                 $productPayload['matiere'] = 'Cuir véritable';
                 $productPayload['description'] = 'Une description détaillée pour le produit ' . $nom;
@@ -87,7 +85,6 @@ class ProductSeeder extends Seeder
                 }
                 $productPayload['image'] = $image;
 
-                // Optional fields if present
                 if (\Illuminate\Support\Facades\Schema::hasColumn('products', 'edition_limitee')) {
                     $productPayload['edition_limitee'] = (bool)rand(0, 1);
                 }

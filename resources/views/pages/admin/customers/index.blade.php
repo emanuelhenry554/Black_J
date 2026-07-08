@@ -13,7 +13,7 @@
 
     <div class="bg-surface border border-outline-variant/30 rounded-lg overflow-hidden shadow-card">
         <table class="w-full text-left border-collapse">
-            <thead class="bg-surface-container text-caption uppercase tracking-widest text-on-surface-variant font-semibold">
+            <thead class="bg-surface text-caption uppercase tracking-widest text-on-surface-variant font-semibold">
                 <tr class="border-b border-outline-variant/30">
                     <th class="px-6 py-3">Client</th>
                     <th class="px-6 py-3">Email</th>
@@ -24,7 +24,7 @@
             </thead>
             <tbody class="divide-y divide-outline-variant/30">
                 @forelse($clients as $client)
-                <tr class="hover:bg-surface-container/50 transition-colors">
+                <tr class="hover:bg-surface/50 transition-colors">
                     <td class="px-6 py-4 font-semibold text-primary">{{ $client->name }}</td>
                     <td class="px-6 py-4 text-on-surface-variant">{{ $client->email }}</td>
                     <td class="px-6 py-4 text-on-surface-variant">{{ $client->telephone ?? '—' }}</td>

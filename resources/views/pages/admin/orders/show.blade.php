@@ -10,14 +10,14 @@
         </a>
         <div>
                 <h2 class="font-serif text-h2 text-primary">Commande #{{ $order->numero }}</h2>
-        <div class="bg-surface-container-low border border-outline-variant/30 p-6 rounded-lg">
+        <div class="bg-surface border border-outline-variant/30 p-6 rounded-lg">
             <h3 class="font-sans text-sm uppercase tracking-widest text-on-surface-variant mb-4">Informations de livraison</h3>
             <p class="font-semibold text-primary">{{ $order->shipping_name }}</p>
             <p class="text-sm text-on-surface-variant">{{ $order->shipping_address }}</p>
             <p class="text-sm text-on-surface-variant mt-3">{{ $order->shipping_email }}</p>
             <p class="text-sm text-on-surface-variant">{{ $order->shipping_telephone }}</p>
         </div>
-        <div class="bg-surface-container-low border border-outline-variant/30 p-6 rounded-lg">
+        <div class="bg-surface border border-outline-variant/30 p-6 rounded-lg">
             <h3 class="font-sans text-sm uppercase tracking-widest text-on-surface-variant mb-4">Résumé de la commande</h3>
             <div class="space-y-2 text-sm text-on-surface-variant">
                 <div class="flex justify-between"><span>Sous-total</span><span>{{ number_format($order->subtotal,0,',',' ') }} FCFA</span></div>
@@ -27,12 +27,12 @@
                 <div class="flex justify-between"><span>Moyen de paiement</span><span>{{ ucfirst(str_replace('_',' ', $order->payment_method)) }}</span></div>
             </div>
         </div>
-        <div class="bg-surface-container-low border border-outline-variant/30 p-6 rounded-lg">
+        <div class="bg-surface border border-outline-variant/30 p-6 rounded-lg">
             <h3 class="font-sans text-sm uppercase tracking-widest text-on-surface-variant mb-4">Actions</h3>
          <form method="POST" action="{{ route('admin.orders.updateStatus.post', $order->id) }}">
     @csrf
     <label class="text-caption uppercase tracking-widest text-on-surface-variant mb-2 block">Changer le statut</label>
-    <select name="statut" class="w-full border border-outline-variant p-3 rounded-lg bg-surface-container focus:border-secondary">
+    <select name="statut" class="w-full border border-outline-variant p-3 rounded-lg bg-surface focus:border-secondary">
         <option value="en_attente" {{ $order->statut === 'en_attente' ? 'selected' : '' }}>En attente</option>
         <option value="paye"       {{ $order->statut === 'paye'       ? 'selected' : '' }}>Payé</option>
         <option value="annule"     {{ $order->statut === 'annule'     ? 'selected' : '' }}>Annulé</option>
@@ -43,7 +43,7 @@
     </div>
 
     <div class="bg-surface border border-outline-variant/30 rounded-lg overflow-hidden">
-        <div class="px-6 py-4 border-b border-outline-variant/30 bg-surface-container-low">
+        <div class="px-6 py-4 border-b border-outline-variant/30 bg-surface">
             <h3 class="font-serif text-h3 text-primary">Articles commandés</h3>
         </div>
         <div class="overflow-x-auto">

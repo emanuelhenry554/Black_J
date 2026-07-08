@@ -23,6 +23,8 @@ use App\Http\Middleware\EnsureAdmin;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/a-propos', [HomeController::class, 'about'])->name('about');
 Route::get('/innovation', [HomeController::class, 'innovation'])->name('innovation');
+Route::get('/innovation/{id}', [HomeController::class, 'innovationShow'])->name('innovation.show');
+Route::get('/innovation/exemples', [HomeController::class, 'innovationExamples'])->name('innovation.examples');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 

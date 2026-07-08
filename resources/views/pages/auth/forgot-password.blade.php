@@ -15,7 +15,7 @@
             <div class="flex flex-col gap-2">
                 <label class="text-caption uppercase tracking-widest text-on-surface-variant font-sans font-semibold">Email</label>
                 <input type="email" name="email" required placeholder="email@exemple.com"
-                       class="input-gold bg-surface-container px-4 py-3 border border-outline-variant focus:ring-0">
+                       class="input-gold bg-surface px-4 py-3 border border-outline-variant focus:ring-0">
             </div>
             <button type="submit" class="btn-primary w-full">Envoyer le lien</button>
             <a href="{{ route('login') }}" class="text-center text-sm text-on-surface-variant hover:text-secondary transition-colors font-sans">

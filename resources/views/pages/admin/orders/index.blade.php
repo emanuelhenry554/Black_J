@@ -29,7 +29,7 @@
     <div class="overflow-x-auto">
         <table class="w-full">
             <thead>
-                <tr class="bg-surface-container-low border-b border-outline-variant/30">
+                <tr class="bg-surface border-b border-outline-variant/30">
                     @foreach(['Commande', 'Client', 'Date', 'Articles', 'Total', 'Statut', 'Actions'] as $h)
                     <th class="text-left text-caption uppercase tracking-widest text-on-surface-variant px-4 py-3 font-sans font-semibold whitespace-nowrap">{{ $h }}</th>
                     @endforeach
@@ -46,7 +46,7 @@
                 ];
                 $st = $statusMap[$order->status ?? 'en_attente'];
                 @endphp
-                <tr class="hover:bg-surface-container-low transition-colors">
+                <tr class="hover:bg-surface transition-colors">
                     <td class="px-4 py-3 font-sans text-sm font-bold text-primary">#{{ $order->numero }}</td>
                     <td class="px-4 py-3">
                         <p class="font-sans text-sm font-semibold text-primary">{{ $order->client->name ?? 'N/A' }}</p>

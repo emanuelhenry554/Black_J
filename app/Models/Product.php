@@ -50,4 +50,17 @@ class Product extends Model
     {
         return $this->hasMany(ProductColor::class);
     }
+
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return asset('img/sacs-blac-joyaux.jpg');
+        }
+
+        if (str_contains($this->image, '/')) {
+            return asset('storage/' . $this->image);
+        }
+
+        return asset('img/' . $this->image);
+    }
 }

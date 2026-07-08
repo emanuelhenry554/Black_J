@@ -6,7 +6,7 @@
 @section('content')
 
 {{-- =================== PAGE HEADER =================== --}}
-<div class="bg-surface-container-low border-b border-outline-variant/30 py-10 pattern-bg">
+<div class="bg-surface border-b border-outline-variant/30 py-10">
     <div class="max-w-site mx-auto px-px-mobile md:px-px-desktop text-center">
         <p class="text-caption uppercase tracking-widest text-secondary font-sans font-semibold mb-3">Blac Joyaux</p>
         <h1 class="font-serif text-h1 text-primary">Notre Boutique</h1>
@@ -22,18 +22,18 @@
         {{-- Category filters (scrollable on mobile) --}}
         <div class="flex gap-2 overflow-x-auto pb-1 -mx-px-mobile px-px-mobile sm:mx-0 sm:px-0 scrollbar-hide">
             @php
-                $categories = [
-                    ''                    => 'Tout',
-                    'do-dominique'        => 'DO - Dominique',
-                    'joyaux-de-bla'       => 'Joyaux de Bla',
-                ];
                 $currentCat = request('categorie', '');
             @endphp
-            @foreach($categories as $slug => $label)
-            <a href="{{ route('boutique.index', array_merge(request()->except('categorie', 'page'), $slug ? ['categorie' => $slug] : [])) }}"
-               class="whitespace-nowrap flex-shrink-0 px-4 py-2 text-caption uppercase tracking-widest font-sans font-semibold transition-colors
-                      {{ $currentCat === $slug ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface-variant hover:bg-surface-dim' }}">
-                {{ $label }}
+            <a href="{{ route('boutique.index', array_merge(request()->except('categorie', 'page'), [])) }}"
+               class="whitespace-nowrap flex-shrink-0 px-4 py-2 text-caption uppercase tracking-widest font-sans font-semibold transition-colors border border-transparent
+                      {{ $currentCat === '' ? 'bg-white text-secondary border-secondary shadow-sm' : 'bg-white text-on-surface-variant hover:border-secondary' }}">
+                Tout
+            </a>
+            @foreach($categories as $category)
+            <a href="{{ route('boutique.index', array_merge(request()->except('categorie', 'page'), ['categorie' => $category->slug])) }}"
+               class="whitespace-nowrap flex-shrink-0 px-4 py-2 text-caption uppercase tracking-widest font-sans font-semibold transition-colors border border-transparent
+                      {{ $currentCat === $category->slug ? 'bg-white text-secondary border-secondary shadow-sm' : 'bg-white text-on-surface-variant hover:border-secondary' }}">
+                {{ $category->nom }}
             </a>
             @endforeach
         </div>
@@ -63,12 +63,12 @@
         <div class="product-card group flex flex-col">
             <div class="relative">
                 <a href="{{ route('boutique.show', $product->slug ?? $product->id) }}"
-                   class="block relative aspect-[3/4] overflow-hidden bg-surface-container-low mb-3">
+                   class="block relative overflow-hidden mb-3 shadow-card rounded-sm transition-shadow hover:shadow-luxury">
                     @if($product->image)
-                    <img src="{{ asset('img/'.$product->image) }}" alt="{{ $product->nom }}"
-                         class="card-img w-full h-full object-cover">
+                    <img src="{{ $product->image_url }}" alt="{{ $product->nom }}"
+                         class="card-img w-full h-auto block">
                     @else
-                    <div class="card-img w-full h-full bg-surface-dim flex items-center justify-center">
+                    <div class="w-full aspect-[3/4] bg-surface flex items-center justify-center">
                         <span class="material-symbols-outlined text-4xl text-outline-variant">shopping_bag</span>
                     </div>
                     @endif
@@ -101,11 +101,19 @@
                 @endauth
             </div>
             <div class="flex flex-col gap-1 flex-grow">
-                <a href="{{ route('boutique.show', $product->slug ?? $product->id) }}">
-                    <h3 class="font-serif text-h3 text-primary leading-snug group-hover:text-secondary transition-colors">{{ $product->nom }}</h3>
+                <a href="{{ route('boutique.show', $product->slug ?? $product->id) }}" class="block">
+                    <h3 class="font-serif text-h3 text-primary leading-snug group-hover:text-secondary transition-colors line-clamp-2 h-[2.8rem] sm:h-auto">
+                        {{ $product->nom }}
+                    </h3>
                 </a>
-                <p class="text-caption uppercase tracking-widest text-on-surface-variant">{{ $product->matiere ?? '' }}</p>
-                <p class="font-sans text-body text-primary font-semibold mt-auto pt-2">{{ number_format($product->prix, 0, ',', ' ') }} FCFA</p>
+                <div class="mt-auto pt-2 flex flex-col gap-0.5">
+                    <p class="font-sans text-body text-primary font-semibold">
+                        {{ number_format($product->prix, 0, ',', ' ') }} <span class="text-[10px] uppercase tracking-widest opacity-70">FCFA</span>
+                    </p>
+                    <p class="text-caption uppercase tracking-widest text-on-surface-variant/70 text-[10px]">
+                        {{ $product->matiere ?? '' }}
+                    </p>
+                </div>
             </div>
         </div>
         @endforeach
@@ -126,7 +134,7 @@
 
         @foreach($products->getUrlRange(max(1, $products->currentPage()-2), min($products->lastPage(), $products->currentPage()+2)) as $page => $url)
             <a href="{{ $url }}"
-               class="w-10 h-10 flex items-center justify-center border text-caption font-sans font-semibold transition-colors
+               class="w-10 h-10 flex items-center justify-center border text-caption font-sans font-semibold transition-s-colors
                       {{ $page == $products->currentPage() ? 'bg-primary text-on-primary border-primary' : 'border-outline-variant text-on-surface-variant hover:border-secondary hover:text-secondary' }}">
                 {{ $page }}
             </a>

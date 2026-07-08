@@ -4,7 +4,7 @@
 @section('meta_description', 'Découvrez l\'histoire de Blac Joyaux, maison de maroquinerie de luxe basée à Abidjan.')
 
 @section('content')
-<div class="bg-surface-container-low border-b border-outline-variant/30 py-10 pattern-bg">
+<div class="bg-surface border-b border-outline-variant/30 py-10">
     <div class="max-w-site mx-auto px-px-mobile md:px-px-desktop text-center">
         <p class="text-caption uppercase tracking-widest text-secondary font-sans font-semibold mb-3">L\'Héritage</p>
         <h1 class="font-serif text-h1 text-primary">Notre Histoire</h1>
@@ -15,8 +15,8 @@
 <div class="max-w-site mx-auto px-px-mobile md:px-px-desktop py-16 md:py-24">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
         <div class="relative">
-            <div class="aspect-[3/4] bg-surface-container overflow-hidden shadow-luxury">
-                <img src="{{ asset('img/sacs-blac-joyaux.jpg') }}" alt="Atelier Blac Joyaux" class="w-full h-full object-cover">
+            <div class="aspect-[3/4] bg-surface overflow-hidden shadow-luxury">
+                <img src="{{ asset('img/sacs-blac-joyaux.jpeg') }}" alt="Atelier Blac Joyaux" class="w-full h-full object-cover">
             </div>
             <div class="absolute -bottom-6 -right-6 w-48 h-48 border-4 border-secondary -z-10 hidden md:block"></div>
         </div>
@@ -53,8 +53,8 @@
             <div class="w-8 h-px bg-secondary"></div>
         </div>
         <div class="relative order-1 md:order-2">
-            <div class="aspect-square bg-surface-container overflow-hidden shadow-luxury border border-outline-variant/30">
-                <img src="{{ asset('img/sacs-blac-joyaux-2.jpg') }}" alt="Détail Artisanat Blac Joyaux" class="w-full h-full object-cover">
+            <div class="aspect-square bg-surface overflow-hidden shadow-luxury border border-outline-variant/30">
+                <img src="{{ asset('img/sacs-blac-joyaux-2.jpeg') }}" alt="Détail Artisanat Blac Joyaux" class="w-full h-full object-cover">
             </div>
             <div class="absolute -top-6 -left-6 w-32 h-32 border-4 border-secondary -z-10 hidden md:block"></div>
         </div>

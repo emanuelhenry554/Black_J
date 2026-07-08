@@ -13,9 +13,9 @@
             theme: {
                 extend: {
                     colors: {
-                        "surface":              "#faf7f2",
-                        "surface-container":    "#efeded",
-                        "surface-container-low":"#f5f3f3",
+                        "surface":              "#FFFFFF",
+                        "surface-container":    "#FFFFFF",
+                        "surface-container-low":"#FFFFFF",
                         "on-surface":           "#1b1c1c",
                         "on-surface-variant":   "#444748",
                         "outline-variant":      "#c4c7c7",
@@ -33,10 +33,10 @@
         }
     </script>
     <style>
-        body { font-family: 'Manrope', sans-serif; background: #efeded; color: #1b1c1c; }
+        body { font-family: 'Manrope', sans-serif; background: #FFFFFF; color: #1b1c1c; }
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
         .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.625rem 1rem; border-radius: 4px; font-size: 0.875rem; font-weight: 500; color: #444748; transition: background 0.15s, color 0.15s; }
-        .sidebar-link:hover, .sidebar-link.active { background: #f5e6c8; color: #a07830; }
+        .sidebar-link:hover, .sidebar-link.active { background: #FFFFFF; color: #a07830; border-right: 3px solid #a07830; }
         .sidebar-link.active { font-weight: 600; }
         #mobile-sidebar { transition: transform 0.3s ease; }
         #mobile-sidebar.closed { transform: translateX(-100%); }
@@ -49,8 +49,7 @@
     <aside class="hidden lg:flex flex-col w-64 bg-surface border-r border-outline-variant/30 min-h-screen sticky top-0 h-screen overflow-y-auto flex-shrink-0">
         <div class="p-6 border-b border-outline-variant/30">
             <div class="flex flex-col">
-                <span class="font-serif text-3xl text-secondary leading-none" style="font-family:'Libre Caslon Text',serif">Bj</span>
-                <span class="text-xs tracking-[0.2em] uppercase text-primary mt-1 font-semibold">Blac Joyaux</span>
+                <img src="{{ asset('img/logo.png') }}" alt="Blac Joyaux Logo" class="h-12 w-auto object-contain mb-2">
                 <span class="text-[10px] tracking-widest text-on-surface-variant uppercase mt-0.5">Administration</span>
             </div>
         </div>

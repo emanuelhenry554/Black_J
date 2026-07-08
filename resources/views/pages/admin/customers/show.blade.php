@@ -40,7 +40,7 @@
                 </h4>
                 <div class="flex flex-col gap-3">
                     @forelse($commandes as $commande)
-                    <div class="flex items-center justify-between p-3 bg-surface-container rounded border border-outline-variant/20">
+                    <div class="flex items-center justify-between p-3 bg-surface rounded border border-outline-variant/20">
                         <div class="flex flex-col">
                             <span class="text-sm font-semibold text-primary">
                                 Commande #{{ $commande->numero_commande }}

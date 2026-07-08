@@ -22,16 +22,16 @@
                 extend: {
                     colors: {
                         /* Heritage Excellence Design System */
-                        "surface":                "#faf7f2",
+                        "surface":                "#FFFFFF",
                         "surface-dim":            "#dbdad9",
-                        "surface-bright":         "#faf7f2",
+                        "surface-bright":         "#f2ede0",
                         "surface-container-lowest":"#ffffff",
                         "surface-container-low":  "#f5f3f3",
                         "surface-container":      "#efeded",
                         "surface-container-high": "#e9e8e7",
                         "surface-container-highest":"#e4e2e2",
                         "on-surface":             "#1b1c1c",
-                        "on-surface-variant":     "#444748",
+                        "on-surface-variant":     "#2a2b2c",
                         "inverse-surface":        "#303031",
                         "inverse-on-surface":     "#f2f0f0",
                         "outline":                "#747878",
@@ -42,13 +42,13 @@
                         "on-primary-container":   "#858383",
                         "inverse-primary":        "#c8c6c5",
                         /* Artisan Gold — accent signature */
-                        "secondary":              "#a07830",
+                        "secondary":              "#8c621a",
                         "on-secondary":           "#ffffff",
                         "secondary-container":    "#f5e6c8",
                         "on-secondary-container": "#6b4f10",
                         "secondary-fixed":        "#f0d898",
                         "secondary-fixed-dim":    "#d4b060",
-                        "background":             "#faf7f2",
+                        "background":             "#FFFFFF",
                         "on-background":          "#1b1c1c",
                         "error":                  "#ba1a1a",
                         "on-error":               "#ffffff",
@@ -66,7 +66,7 @@
                         "body-lg":   ["1.125rem",                 { lineHeight: "1.75", fontWeight: "400" }],
                         "body":      ["1rem",                     { lineHeight: "1.6",  fontWeight: "400" }],
                         "label":     ["0.875rem",                 { lineHeight: "1.25", letterSpacing: "0.1em", fontWeight: "600" }],
-                        "caption":   ["0.75rem",                  { lineHeight: "1.2",  letterSpacing: "0.05em", fontWeight: "500" }],
+                        "caption":   ["0.8rem",                  { lineHeight: "1.2",  letterSpacing: "0.05em", fontWeight: "600" }],
                     },
                     spacing: {
                         "px-mobile":  "1.25rem",  /* 20px */
@@ -78,8 +78,8 @@
                         "site": "1440px",
                     },
                     boxShadow: {
-                        "luxury": "0 8px 40px rgba(0,0,0,0.06)",
-                        "card":   "0 2px 12px rgba(0,0,0,0.04)",
+                        "luxury": "0 12px 40px rgba(0,0,0,0.12)",
+                        "card":   "0 4px 20px rgba(0,0,0,0.08)",
                     },
                 }
             }
@@ -91,7 +91,7 @@
         *, *::before, *::after { box-sizing: border-box; }
 
         body {
-            background-color: #faf7f2;
+            background-color: #FFFFFF;
             color: #1b1c1c;
             font-family: 'Manrope', system-ui, sans-serif;
             -webkit-font-smoothing: antialiased;
@@ -120,7 +120,7 @@
             left: 0;
             width: 0;
             height: 1px;
-            background: #a07830;
+            background: #8c621a;
             transition: width 0.3s ease;
         }
         .nav-link:hover::after { width: 100%; }
@@ -128,8 +128,8 @@
         /* Input focus gold */
         .input-gold:focus {
             outline: none;
-            border-color: #a07830;
-            box-shadow: 0 1px 0 0 #a07830;
+            border-color: #8c621a;
+            box-shadow: 0 1px 0 0 #8c621a;
         }
 
         /* Mobile drawer */
@@ -156,7 +156,7 @@
         /* Gold chip */
         .chip-gold {
             display: inline-block;
-            background: #a07830;
+            background: #8c621a;
             color: #fff;
             font-family: 'Manrope', sans-serif;
             font-size: 0.6875rem;
@@ -183,7 +183,7 @@
             padding: 0.875rem 2rem;
             transition: background 0.2s, color 0.2s;
         }
-        .btn-primary:hover { background: #a07830; }
+        .btn-primary:hover { background: #8c621a; }
 
         .btn-outline {
             display: inline-block;
@@ -195,10 +195,10 @@
             letter-spacing: 0.1em;
             text-transform: uppercase;
             padding: 0.875rem 2rem;
-            border: 1px solid #a07830;
+            border: 1px solid #8c621a;
             transition: background 0.2s, color 0.2s;
         }
-        .btn-outline:hover { background: #a07830; color: #fff; }
+        .btn-outline:hover { background: #8c621a; color: #fff; }
     </style>
 
     @stack('styles')
@@ -209,32 +209,30 @@
     {{-- ====================== HEADER / NAV ====================== --}}>
 
     {{-- ====================== HEADER / NAV ====================== --}}
-    <header id="main-header" class="bg-surface/95 backdrop-blur-md fixed top-0 left-0 w-full z-50 border-b border-outline-variant/30 transition-all duration-300 py-3">
-        <div class="flex items-center justify-between max-w-site mx-auto px-px-mobile md:px-px-desktop py-1">
+    <header id="main-header" class="bg-surface/80 backdrop-blur-md fixed top-0 left-0 w-full z-50 border-b border-outline-variant/20 transition-all duration-300 py-4">
+        <div class="grid grid-cols-3 items-center max-w-site mx-auto px-px-mobile md:px-px-desktop">
 
-            {{-- Left nav (desktop) --}}
-            <nav class="hidden md:flex items-center gap-8">
-                <a href="{{ route('collections.index') }}" class="nav-link text-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">Collections</a>
-                <a href="{{ route('innovation') }}" class="nav-link text-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">Innovation</a>
-                <a href="{{ route('about') }}" class="nav-link text-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">À Propos</a>
-            </nav>
+            {{-- Left Side --}}
+            <div class="flex items-center justify-start gap-8">
+                <button id="menu-open-btn" class="md:hidden text-primary p-1" aria-label="Ouvrir le menu">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <nav class="hidden md:flex items-center gap-8">
+                    <a href="{{ route('collections.index') }}" class="nav-link text-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">Collections</a>
+                    <a href="{{ route('innovation') }}" class="nav-link text-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">Innovation</a>
+                    <a href="{{ route('about') }}" class="nav-link text-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">À Propos</a>
+                </nav>
+            </div>
 
-            {{-- Mobile hamburger --}}
-            <button id="menu-open-btn" class="md:hidden text-primary p-1" aria-label="Ouvrir le menu">
-                <span class="material-symbols-outlined">menu</span>
-            </button>
-
-            {{-- Logo Center --}}
-            <div class="flex-1 flex justify-center md:flex-none">
-                <a href="{{ route('home') }}" class="flex flex-col items-center leading-none group" aria-label="Blac Joyaux — Accueil">
-                    <span class="font-serif text-3xl text-secondary leading-none group-hover:opacity-80 transition-opacity">Bj</span>
-                    <span class="font-sans text-xs tracking-[0.25em] uppercase text-primary mt-0.5">Blac Joyaux</span>
-                    <span class="font-sans text-[9px] tracking-widest text-on-surface-variant uppercase">Abidjan</span>
+            {{-- Center Logo --}}
+            <div class="flex justify-center">
+                <a href="{{ route('home') }}" class="flex items-center justify-center group" aria-label="Blac Joyaux — Accueil">
+                    <img src="{{ asset('img/logo.png') }}" alt="Blac Joyaux Logo" class="h-12 md:h-16 w-auto object-contain group-hover:opacity-80 transition-opacity">
                 </a>
             </div>
 
-            {{-- Right actions --}}
-            <div class="flex items-center gap-4 md:gap-6 text-primary">
+            {{-- Right Side --}}
+            <div class="flex items-center justify-end gap-4 md:gap-6 text-primary">
                 {{-- Search Bar --}}
                 <div id="search-container" class="absolute right-0 top-0 translate-x-full opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-2 bg-surface border border-outline-variant/30 px-3 py-1 rounded-full shadow-luxury">
                     <form action="{{ route('boutique.index') }}" method="GET" class="flex items-center gap-2">
@@ -281,7 +279,9 @@
     <div id="menu-overlay" class="fixed inset-0 bg-black/40 z-[60] hidden" aria-hidden="true"></div>
     <aside id="mobile-menu" class="hidden-menu fixed inset-y-0 left-0 w-[80vw] max-w-xs bg-surface z-[70] flex flex-col shadow-luxury overflow-y-auto" role="dialog" aria-modal="true" aria-label="Menu principal">
         <div class="flex items-center justify-between px-6 py-5 border-b border-outline-variant/30">
-            <span class="font-serif text-2xl text-secondary">Bj</span>
+            <a href="{{ route('home') }}" class="flex items-center gap-3">
+                <img src="{{ asset('img/logo.png') }}" alt="Blac Joyaux Logo" class="h-10 w-auto object-contain">
+            </a>
             <button id="menu-close-btn" class="text-primary" aria-label="Fermer le menu">
                 <span class="material-symbols-outlined">close</span>
             </button>
@@ -338,47 +338,16 @@
         @yield('content')
     </main>
 
-    {{-- ====================== PRE-FOOTER CONTACT BAR ====================== --}}
-    @unless(isset($hideContactBar) && $hideContactBar)
-    <div class="bg-surface-container-low py-10 border-t border-outline-variant/30">
-        <div class="max-w-site mx-auto px-px-mobile md:px-px-desktop grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-outline-variant/30">
-            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 p-6 text-center sm:text-left">
-                <span class="material-symbols-outlined text-secondary text-3xl flex-shrink-0">location_on</span>
-                <div>
-                    <h4 class="text-caption uppercase tracking-widest text-primary font-sans font-semibold mb-1">Boutique à Abidjan</h4>
-                    <p class="text-body text-on-surface-variant text-sm">Cocody Riviera Palmeraie<br>Abidjan, Côte d'Ivoire</p>
-                </div>
-            </div>
-            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 p-6 text-center sm:text-left">
-                <span class="material-symbols-outlined text-secondary text-3xl flex-shrink-0">forum</span>
-                <div>
-                    <h4 class="text-caption uppercase tracking-widest text-primary font-sans font-semibold mb-1">Besoin d'aide ?</h4>
-                    <p class="text-body text-on-surface-variant text-sm">Écrivez-nous sur WhatsApp<br>+225 07 00 00 00 00</p>
-                </div>
-            </div>
-            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 p-6 text-center sm:text-left">
-                <span class="material-symbols-outlined text-secondary text-3xl flex-shrink-0">photo_camera</span>
-                <div>
-                    <h4 class="text-caption uppercase tracking-widest text-primary font-sans font-semibold mb-1">Suivez-nous</h4>
-                    <p class="text-body text-on-surface-variant text-sm">@blacjoyaux<br>Sur Instagram & TikTok</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    @endunless
-
     {{-- ====================== FOOTER ====================== --}}
-    <footer class="bg-surface-container-lowest py-16 border-t border-outline-variant/30">
+    <footer class="bg-surface py-16 border-t border-outline-variant/30">
         <div class="max-w-site mx-auto px-px-mobile md:px-px-desktop grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             {{-- Brand --}}
             <div class="col-span-2 md:col-span-1 flex flex-col gap-4">
                 <a href="{{ route('home') }}" class="flex flex-col">
-                    <span class="font-serif text-4xl text-secondary leading-none">Bj</span>
-                    <span class="font-sans text-sm tracking-[0.2em] uppercase text-primary mt-1">Blac Joyaux</span>
+                    <img src="{{ asset('img/logo.png') }}" alt="Blac Joyaux Logo" class="h-16 w-auto object-contain mb-2">
                 </a>
                 <p class="text-body text-on-surface-variant text-sm leading-relaxed">
-                    Luxe. Élégance. Intemporalité.<br>
-                    Nés à Abidjan, Côte d'Ivoire.
+                    Luxe. Élégance. Intemporalité.
                 </p>
             </div>
 

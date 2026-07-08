@@ -17,4 +17,17 @@ class ProductImage extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function getImageUrlAttribute()
+    {
+        if (!$this->path) {
+            return asset('img/sacs-blac-joyaux.jpg');
+        }
+
+        if (str_contains($this->path, '/')) {
+            return asset('storage/' . $this->path);
+        }
+
+        return asset('img/' . $this->path);
+    }
 }

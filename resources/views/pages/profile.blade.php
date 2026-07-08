@@ -21,7 +21,7 @@
             ] as [$route, $icon, $label])
             <a href="{{ route($route) }}"
                class="flex-shrink-0 flex items-center gap-3 px-4 py-3 text-caption uppercase tracking-widest font-sans font-semibold transition-colors
-                      {{ request()->routeIs($route) ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface-variant hover:bg-surface-dim' }}">
+                      {{ request()->routeIs($route) ? 'bg-primary text-on-primary' : 'bg-surface text-on-surface-variant hover:bg-surface' }}">
                 <span class="material-symbols-outlined text-[18px]">{{ $icon }}</span>
                 <span class="hidden sm:block">{{ $label }}</span>
             </a>
@@ -44,7 +44,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
                 {{-- Personal info --}}
-                <div class="bg-surface-container-low p-6">
+                <div class="bg-surface p-6">
                     <div class="flex justify-between items-start mb-6 pb-4 border-b border-outline-variant/30">
                         <h2 class="font-serif text-h2 text-primary">Informations</h2>
                         <a href="#edit" class="text-caption text-secondary hover:underline font-sans font-semibold uppercase tracking-widest">Modifier</a>
@@ -67,7 +67,7 @@
                 </div>
 
                 {{-- Password --}}
-                <div class="bg-surface-container-low p-6">
+                <div class="bg-surface p-6">
                     <h2 class="font-serif text-h2 text-primary mb-6 pb-4 border-b border-outline-variant/30">Mot de passe</h2>
                     <form method="POST" action="{{ route('profile.password') }}" class="flex flex-col gap-5">
                         @csrf @method('PATCH')
@@ -88,7 +88,7 @@
                 </div>
 
                 {{-- Recent orders --}}
-                <div class="md:col-span-2 bg-surface-container-low p-6">
+                <div class="md:col-span-2 bg-surface p-6">
                     <div class="flex justify-between items-center mb-6 pb-4 border-b border-outline-variant/30">
                         <h2 class="font-serif text-h2 text-primary">Commandes récentes</h2>
                         <a href="{{ route('profile.orders') }}" class="text-caption text-secondary hover:underline font-sans font-semibold uppercase tracking-widest">Tout voir</a>

@@ -6,7 +6,7 @@
 @section('content')
 
 {{-- PAGE HEADER --}}
-<div class="bg-surface-container-low border-b border-outline-variant/30 py-10 pattern-bg">
+<div class="bg-surface border-b border-outline-variant/30 py-10">
     <div class="max-w-site mx-auto px-px-mobile md:px-px-desktop text-center">
         <p class="text-caption uppercase tracking-widest text-secondary font-sans font-semibold mb-3">L'Art du Cuir</p>
         <h1 class="font-serif text-h1 text-primary">Nos Univers de Maroquinerie</h1>
@@ -17,32 +17,19 @@
 {{-- COLLECTIONS GRID --}}
 <div class="max-w-site mx-auto px-px-mobile md:px-px-desktop py-16 md:py-24">
 
-    @php
-    $fallbackImages = [
-        'do-dominique'        => 'Collection-Sacs-Blac-Joyaux-Do-Dominique-Ouattara.jpg',
-        'joyaux-de-bla'       => 'presentation-sac-blac-joyaux-croco-violet-.jpg',
-    ];
-
-    $descriptions = [
-        'do-dominique'        => "L'expression pure de l'élégance ivoirienne. Des silhouettes fortes et un cuir noble pour une allure souveraine.",
-        'joyaux-de-bla'       => "L'audace et la couleur au service du luxe. Chaque pièce est un bijou de caractère et de passion.",
-    ];
-    @endphp
-
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 md:gap-10 max-w-5xl mx-auto justify-center">
-        @foreach($categories as $category)
+        @foreach($categories->where('slug', '!=', 'innovation') as $category)
         @php
-            $img  = $category->image ?: ($fallbackImages[$category->slug] ?? 'sacs-blac-joyaux.jpg');
-            $desc = $descriptions[$category->slug] ?? 'Decouvrez notre selection exclusive.';
+            $desc = $category->description ?: 'Découvrez notre sélection exclusive.';
             $count = $category->products()->count();
         @endphp
         <a href="{{ route('boutique.index', ['categorie' => $category->slug]) }}" class="group block">
 
             {{-- Image --}}
-            <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-5 shadow-luxury border border-outline-variant/30">
-                <img src="{{ asset('img/'.$img) }}"
+            <div class="relative overflow-hidden bg-surface mb-5 shadow-luxury border border-outline-variant/30">
+                <img src="{{ $category->image_url }}"
                      alt="{{ $category->nom }}"
-                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                     class="block w-full h-auto object-contain object-center transition-transform duration-700 group-hover:scale-102">
 
                 {{-- Overlay hover --}}
                 <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/50 transition-colors duration-400 flex items-center justify-center">
@@ -83,7 +70,7 @@
 </div>
 
 {{-- CTA --}}
-<section class="py-16 bg-primary text-on-primary pattern-bg">
+<section class="py-16 bg-primary text-on-primary">
     <div class="max-w-site mx-auto px-px-mobile md:px-px-desktop text-center">
         <h2 class="font-serif text-h2 text-on-primary mb-3">Vous ne savez pas par ou commencer ?</h2>
         <p class="font-sans text-body text-on-primary/70 mb-8 max-w-md mx-auto">

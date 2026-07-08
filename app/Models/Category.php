@@ -14,10 +14,24 @@ class Category extends Model
         'nom',
         'slug',
         'image',
+        'description',
     ];
 
     public function products(): HasMany
     {
         return $this->hasMany(Product::class, 'categorie_id');
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return asset('img/sacs-blac-joyaux.jpg');
+        }
+
+        if (str_contains($this->image, '/')) {
+            return asset('storage/' . $this->image);
+        }
+
+        return asset('img/' . $this->image);
     }
 }
