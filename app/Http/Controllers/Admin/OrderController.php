@@ -36,6 +36,13 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
+        // Valider le statut avec une whitelist
+        $request->validate([
+            'statut' => 'required|in:en_attente,paye,annule',
+        ], [
+            'statut.in' => 'Le statut doit être l\'un des statuts valides: en_attente, paye, ou annule.',
+        ]);
+
         $order = Order::findOrFail($id);
         $order->statut = $request->statut;
         $order->save();

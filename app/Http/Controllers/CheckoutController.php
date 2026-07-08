@@ -59,6 +59,17 @@ class CheckoutController extends Controller
         $shipping = $subtotal >= 100000 ? 0 : 5000;
         $total    = $subtotal + $shipping;
 
+        // Mise à jour de l'adresse de l'utilisateur
+        if (Auth::check()) {
+            $user = Auth::user();
+            $newAddress = $request->adresse . ' - ' . $request->commune . ' - ' . $request->ville;
+            // Mettre à jour l'adresse de l'utilisateur pour éviter les doublons
+            if ($user->address !== $newAddress) {
+                $user->address = $newAddress;
+                $user->save();
+            }
+        }
+
         // Création de la commande
         $order = Order::create([
             'user_id'            => Auth::id(),

@@ -63,7 +63,7 @@
                         <div class="sm:col-span-2 flex flex-col gap-1.5">
                             <label for="adresse" class="text-caption uppercase tracking-widest font-sans font-semibold text-primary">Adresse de livraison *</label>
                             <input type="text" id="adresse" name="adresse" placeholder="Cocody Riviera Palmeraie, Rue des Fleurs"
-                                   value="{{ old('adresse') }}" required
+                                   value="{{ old('adresse', auth()->user()?->address ?? '') }}" required
                                    class="input-gold bg-surface border-0 border-b border-outline-variant px-0 py-2.5 font-sans text-body text-on-surface placeholder-outline-variant focus:ring-0">
                             @error('adresse')
                             <p class="text-caption text-error">{{ $message }}</p>
